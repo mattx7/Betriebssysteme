@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Cause Accident
-        Accident accident = new Accident(Thread.currentThread(), rounds * 100);
+        Accident accident = new Accident(Thread.currentThread(), rounds * 200);
         accident.start();
 
         // start cars
@@ -25,14 +25,15 @@ public class Main {
                 car.join();
             }
         } catch (InterruptedException e) {
-            for (Car auti : cars) {
-                auti.interrupt();
+            for (Car car : cars) {
+                car.interrupt();
             }
             System.out.println("Accident!");
             return;
         }
 
         // Alle ankommen
+        accident.interrupt();
         Arrays.sort(cars);
         System.out.println("**** Result ****");
         for (int i = 0; i < Main.cars; i++) {
@@ -42,50 +43,5 @@ public class Main {
 
 }
 
-class Car extends Thread implements Comparable<Car> {
-    private int runden;
-    public int nummer;
-    public int gesamtFahrzeit = 0;
 
-    Car(int nummer, int runden) {
-        this.nummer = nummer;
-        this.runden = runden;
-    }
 
-    public void run() {
-        for (int i = 0; i < runden && !isInterrupted(); i++) {
-            long zeit = (long)(Math.random() * 100);
-            gesamtFahrzeit += zeit;
-            try {
-                Thread.sleep(zeit);
-            } catch (InterruptedException e) {
-                interrupt();
-            }
-        }
-    }
-
-    @Override
-    public int compareTo(Car o) {
-        return gesamtFahrzeit - o.gesamtFahrzeit;
-    }
-}
-
-class Accident extends Thread {
-    private Thread parent;
-    private int crashModifier;
-
-    Accident(Thread parent, int crashModifier) {
-        this.parent = parent;
-        this.crashModifier = crashModifier;
-    }
-
-    @Override
-    public void run() {
-        try {
-            Thread.sleep((long) (Math.random() * crashModifier));
-        } catch (InterruptedException e) {
-            interrupt();
-        }
-        parent.interrupt();
-    }
-}
