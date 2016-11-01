@@ -8,13 +8,13 @@ import java.util.Random;
 public enum Hand {
     Rock, Paper, Scissors;
 
-    public static Hand getRandom(Hand exclude) {
+    public static Hand getRandom(Hand hand) {
         Random rand = new Random();
 
         Hand returnValue;
         do {
             returnValue = values()[rand.nextInt(values().length)];
-        } while(returnValue.equals(exclude));
+        } while(returnValue.equals(hand));
 
         return returnValue;
     }
