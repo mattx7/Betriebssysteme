@@ -70,7 +70,7 @@ class Simulation {
             students.add(stud);
         }
 
-        System.out.println("==== Kasse öffnet ====");
+        System.out.println("==== Checkout opens ====");
 
         // simulate for a given time
         try {
@@ -85,6 +85,6 @@ class Simulation {
             }
         }
 
-        System.out.println("==== Kasse schließt ====");
+        System.out.println("==== Checkout closes ====");
     }
 }
