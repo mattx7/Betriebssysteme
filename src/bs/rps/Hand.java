@@ -1,5 +1,8 @@
 package bs.rps;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -8,18 +11,16 @@ import java.util.Random;
 public enum Hand {
     Rock, Paper, Scissors;
 
-    public static Hand getRandom(Hand hand) {
-        Random rand = new Random();
+    private static final List<Hand> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int SIZE = VALUES.size();
+    private static final Random RANDOM = new Random();
 
-        Hand returnValue;
-        do {
-            returnValue = values()[rand.nextInt(values().length)];
-        } while(returnValue.equals(hand));
-
-        return returnValue;
+    public static Hand randomHand()  {
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
+
     public static Hand getRandom() {
-        return getRandom(null);
+        return randomHand();
     }
 }
