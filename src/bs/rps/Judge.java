@@ -1,9 +1,5 @@
 package bs.rps;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * Created by Neak on 12.11.2016.
  */
@@ -15,16 +11,17 @@ public class Judge extends Thread {
 
     @Override
     public void run() {
-        refresh();
+        shuffle();
 
         while(!isInterrupted()) {
             try {
                 synchronized (this) {
                     notifyAll();
                     wait();
+
                     payoff(playerUno,playerDos);
                     // refresh hand
-                    refresh();
+                    shuffle();
                 }
             } catch (InterruptedException e) {
                 interrupt();
@@ -48,9 +45,9 @@ public class Judge extends Thread {
     }
 
 
-    public void refresh() {
-        playerUno = playerUno.changeHand(playerUno);
-        playerDos = playerDos.changeHand(playerDos);
-        System.out.println(String.format("Judge has new hand : %s, %s", playerUno.getHand().toString(), playerDos.getHand().toString()));
+    public void shuffle() {
+        playerUno.changeHand();
+        playerDos.changeHand();
+        System.out.println(String.format("Hands have been shuffled: Nr.01 has %s, Nr.02 has %s", playerUno.getHand().toString(), playerDos.getHand().toString()));
     }
 }

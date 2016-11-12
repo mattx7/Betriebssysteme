@@ -11,16 +11,12 @@ import java.util.Random;
 public enum Hand {
     Rock, Paper, Scissors;
 
-    private static final List<Hand> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-    private static final int SIZE = VALUES.size();
-    private static final Random RANDOM = new Random();
-
-    public static Hand randomHand()  {
-        return VALUES.get(RANDOM.nextInt(SIZE));
-    }
-
+    private static final List<Hand> VALUES = Collections.unmodifiableList(Arrays.asList(values())); //Liste mit unseren Enums
+    private static final int SIZE = VALUES.size(); //Ein Int der so groß ist wie die Anzahl unserer Enums
+    private static final Random RANDOM = new Random(); //Random
 
     public static Hand getRandom() {
-        return randomHand();
+        return VALUES.get(RANDOM.nextInt(SIZE)); //Return ein zufälligen Enum
     }
+
 }
