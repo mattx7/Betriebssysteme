@@ -3,45 +3,36 @@ package bs.rps;
 /**
  * Created by Neak on 12.11.2016.
  */
-public class Player extends Thread {
+class Player extends Thread {
 
     private Hand hand;
     private int nr;
-    private Judge judge;
+    private GameTable table;
 
-    public Player(int nr, Judge judge, Hand hand) {
+    Player(int nr, GameTable table) {
         this.nr = nr;
-        this.judge = judge;
-        this.hand = hand;
+        this.table = table;
+        this.hand = Hand.getRandom();
     }
 
     public void changeHand() {
-        setHand(hand.getRandom());
+        hand = Hand.getRandom();
     }
 
-    public Hand getHand() {
+    Hand getHand() {
         return hand;
     }
 
-    public void setHand(Hand hand) {
-        this.hand = hand;
+    public void setTable(GameTable table) {
+        this.table = table;
     }
 
     @Override
-    public void run() { //hier ist bisher alles müll
-        while (!isInterrupted()) {
-            try {
-                synchronized (judge) {
-                    judge.wait();
-                    sleep(500);
-                }
+    public void run() {
 
-            } catch (InterruptedException e) {
-                interrupt();
-            }
-        }
-        System.out.println(String.format("%s has finished.", this));
+        // TODO warten auf auswertung
     }
+
     @Override
     public String toString() {
         return String.format("Player Nr.%d has %s and", nr, hand);

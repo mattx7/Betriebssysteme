@@ -1,30 +1,26 @@
 package bs.rps;
 
+import java.util.List;
+
 /**
  * Created by Neak on 12.11.2016.
  */
 public class GameTable {
 
-    private Hand handUno;
-    private Hand handDos;
+    private List<Player> players;
 
-    public GameTable() {
+    void addPlayer(Player player) {
+        if (players.size() >= 2)
+            throw new IllegalArgumentException("Not more than 2 Hands on one table");
 
+        this.players.add(player);
     }
 
-    public Hand getHandUno() {
-        return handUno;
+    public Player getPlayer1() {
+        return players.get(0);
     }
 
-    public void setHandUno(Hand handUno) {
-        this.handUno = handUno;
-    }
-
-    public Hand getHandDos() {
-        return handDos;
-    }
-
-    public void setHandDos(Hand handDos) {
-        this.handDos = handDos;
+    public Player getPlayer2() {
+        return players.get(1);
     }
 }

@@ -1,5 +1,6 @@
 package bs.rps;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,27 +9,18 @@ import java.util.List;
  */
 public class Simulation {
 
-    private List<Player> players = new ArrayList<Player>(); //zum interrupten ganz unten
-
-    private Judge judge;
-
-    public Simulation() {
-
+    Simulation() {
+        List<Player> players = new ArrayList<Player>();
+        Judge judge = new Judge();
         GameTable gameTable = new GameTable();
+        Player playerUno = new Player(1, gameTable);
+        Player playerDos = new Player(2, gameTable);
 
-        // add players
-        Player playerUno = new Player(1, judge, Hand.getRandom());
-        // player will immediately wait for judge to notify him
-        playerUno.start();
         players.add(playerUno);
-
-        Player playerDos = new Player(2, judge, Hand.getRandom());
-        playerDos.start();
         players.add(playerDos);
 
-        // initialize judge
-        judge = new Judge(playerUno, playerDos);
-        judge.setName("Judge-Thread");
+        playerUno.start();
+        playerDos.start();
         judge.start();
 
         try {
