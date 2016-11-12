@@ -11,8 +11,10 @@ public class Player extends Thread {
     private int nr;
     private Judge judge;
 
-    public Player(int nr, Judge judge) {
+    public Player(int nr, Judge judge, Hand hand) {
         this.nr = nr;
+        this.judge = judge;
+        this.hand = hand;
     }
 
     public void changeHand() {
@@ -34,15 +36,15 @@ public class Player extends Thread {
                 synchronized (judge) {
                     judge.wait();
 
-                    Collection<Player> availablePlayer = judge.getAvailablePlayers();
-                    if (!availablePlayer.contains(availablePlayer)) {
+                    Collection<Player> availablePlayers = judge.getAvailablePlayers();
+                    if (!availablePlayers.contains(hand)) {
                         // consume
-                        System.out.println(String.format("%s consumes ingredients and smokes a cigarette.", this));
+                        System.out.println(String.format("%s has %s", this, this.getHand().toString()));
                         sleep(500);
 
                         judge.notify();
                     } else {
-                        System.out.println(String.format("%s is unable to use the available ingredients.", this));
+                        System.out.println(String.format("%s has %s ", this, this.getHand().toString()));
                     }
                 }
 

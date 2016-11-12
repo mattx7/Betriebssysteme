@@ -18,12 +18,12 @@ public class Simulation {
         judge.setName("Judge-Thread");
 
         // add players
-        Player playerUno = new Player(1, judge);
+        Player playerUno = new Player(1, judge, Hand.getRandom());
         // player will immediately wait for judge to notify him
         playerUno.start();
         players.add(playerUno);
 
-        Player playerDos = new Player(2, judge);
+        Player playerDos = new Player(2, judge, Hand.getRandom());
         playerDos.start();
         players.add(playerDos);
 
