@@ -1,13 +1,15 @@
 package bs.rps;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Neak on 12.11.2016.
+ *
  */
-public class GameTable {
+class GameTable {
 
-    private List<Player> players;
+    private List<Player> players = new ArrayList<Player>();
 
     void addPlayer(Player player) {
         if (players.size() >= 2)
@@ -16,11 +18,11 @@ public class GameTable {
         this.players.add(player);
     }
 
-    public Player getPlayer1() {
+    Player getPlayer1() {
         return players.get(0);
     }
 
-    public Player getPlayer2() {
+    Player getPlayer2() {
         return players.get(1);
     }
 }

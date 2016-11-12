@@ -7,8 +7,9 @@ import java.util.Random;
 
 /**
  * Created by Neak on 01.11.2016.
+ *
  */
-public enum Hand {
+enum Hand {
     Rock, Paper, Scissors;
 
     private static final List<Hand> VALUES = Collections.unmodifiableList(Arrays.asList(values())); //Liste mit unseren Enums

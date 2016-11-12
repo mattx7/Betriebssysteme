@@ -3,10 +3,15 @@ package bs.rps;
 
 /**
  * Created by Neak on 12.11.2016.
+ *
  */
-public class Judge extends Thread {
+class Judge extends Thread {
 
     private GameTable table;
+
+    Judge(GameTable table) {
+        this.table = table;
+    }
 
     @Override
     public void run() {
@@ -14,7 +19,8 @@ public class Judge extends Thread {
             //                notifyAll();
             //                wait();
 
-            payoff(); // Runde auswerten
+            Player winner = payoff(); // Runde auswerten
+            System.out.println(String.format("[ %s : %s ] Player %s wins", table.getPlayer1().getHand(), table.getPlayer2().getHand(), winner));
             startNextRound();// refresh hand
 
         }
@@ -25,7 +31,7 @@ public class Judge extends Thread {
     /**
      * @return Winning Player or null if draw
      */
-    public Player payoff() {
+    private Player payoff() {
         Player player1 = table.getPlayer1();
         Player player2 = table.getPlayer2();
 
@@ -39,10 +45,9 @@ public class Judge extends Thread {
             return player2;
     }
 
-    public void startNextRound() {
+    private void startNextRound() {
         table.getPlayer1().changeHand();
         table.getPlayer2().changeHand();
-        System.out.println(String.format("Hands have been shuffled: Nr.01 has %s, Nr.02 has %s", table.getPlayer1().getHand().toString(), table.getPlayer2().getHand().toString()));
     }
 
     public void setTable(GameTable table) {

@@ -17,6 +17,7 @@ class Player extends Thread {
 
     public void changeHand() {
         hand = Hand.getRandom();
+        System.out.println(nr + " hands changed");
     }
 
     Hand getHand() {
@@ -35,6 +36,6 @@ class Player extends Thread {
 
     @Override
     public String toString() {
-        return String.format("Player Nr.%d has %s and", nr, hand);
+        return nr + "";
     }
 }

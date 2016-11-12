@@ -1,39 +1,35 @@
 package bs.rps;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Neak on 01.11.2016.
  */
 public class Simulation {
 
     Simulation() {
-        List<Player> players = new ArrayList<Player>();
-        Judge judge = new Judge();
-        GameTable gameTable = new GameTable();
-        Player playerUno = new Player(1, gameTable);
-        Player playerDos = new Player(2, gameTable);
+        GameTable table = new GameTable();
+        Judge judge = new Judge(table);
+        Player player1 = new Player(1, table);
+        Player player2 = new Player(2, table);
 
-        players.add(playerUno);
-        players.add(playerDos);
+        table.addPlayer(player1);
+        table.addPlayer(player2);
 
-        playerUno.start();
-        playerDos.start();
+        player1.start();
+        player2.start();
         judge.start();
 
         try {
-            Thread.currentThread().sleep(4000);
+            Thread.currentThread().sleep(40);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
         judge.interrupt();
+        player1.interrupt();
+        player2.interrupt();
 
-        for(Player cPlayer : players) {
-            cPlayer.interrupt();
-        }
+
     }
 
 }
