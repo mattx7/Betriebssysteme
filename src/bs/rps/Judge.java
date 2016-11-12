@@ -1,9 +1,5 @@
 package bs.rps;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * Created by Neak on 12.11.2016.
  */
@@ -13,6 +9,10 @@ public class Judge extends Thread {
 
     private Player playerDos;
 
+    public Judge(Player playerUno, Player playerDos) {
+        this.playerUno = playerUno;
+        this.playerDos = playerDos;
+    }
     @Override
     public void run() {
         shuffle();
@@ -47,14 +47,6 @@ public class Judge extends Thread {
             return String.format("One's '%s' beats Two's '%s'.", playerUno, playerDos);
         }
         return String.format("Two's '%s' beats One's '%s'.", playerDos, playerUno);
-    }
-
-    public Collection<Player> getAvailablePlayers() {
-        List<Player> availablePlayer = new ArrayList<Player>();
-        availablePlayer.add(playerUno);
-        availablePlayer.add(playerDos);
-
-        return availablePlayer;
     }
 
     public void shuffle() {

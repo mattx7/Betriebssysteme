@@ -8,14 +8,13 @@ import java.util.List;
  */
 public class Simulation {
 
-    private List<Player> players = new ArrayList<Player>();
+    private List<Player> players = new ArrayList<Player>(); //zum interrupten ganz unten
 
     private Judge judge;
 
     public Simulation() {
-        // initialize judge
-        judge = new Judge();
-        judge.setName("Judge-Thread");
+
+        GameTable gameTable = new GameTable();
 
         // add players
         Player playerUno = new Player(1, judge, Hand.getRandom());
@@ -27,6 +26,9 @@ public class Simulation {
         playerDos.start();
         players.add(playerDos);
 
+        // initialize judge
+        judge = new Judge(playerUno, playerDos);
+        judge.setName("Judge-Thread");
         judge.start();
 
         try {

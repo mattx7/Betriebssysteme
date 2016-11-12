@@ -1,7 +1,5 @@
 package bs.rps;
 
-import java.util.Collection;
-
 /**
  * Created by Neak on 12.11.2016.
  */
@@ -30,34 +28,22 @@ public class Player extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run() { //hier ist bisher alles müll
         while (!isInterrupted()) {
             try {
                 synchronized (judge) {
                     judge.wait();
-
-                    Collection<Player> availablePlayers = judge.getAvailablePlayers();
-                    if (!availablePlayers.contains(hand)) {
-                        // consume
-                        System.out.println(String.format("%s has %s", this, this.getHand().toString()));
-                        sleep(500);
-
-                        judge.notify();
-                    } else {
-                        System.out.println(String.format("%s has %s ", this, this.getHand().toString()));
-                    }
+                    sleep(500);
                 }
 
             } catch (InterruptedException e) {
                 interrupt();
             }
         }
-
         System.out.println(String.format("%s has finished.", this));
     }
-
     @Override
     public String toString() {
-        return String.format("Player No.%d ( has %s )", nr, hand);
+        return String.format("Player Nr.%d has %s and", nr, hand);
     }
 }
