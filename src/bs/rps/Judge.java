@@ -21,7 +21,7 @@ class Judge extends Thread {
 
             Player winner = payoff(); // Runde auswerten
             System.out.println(String.format("[ %s : %s ] Player %s wins", table.getPlayer1().getHand(), table.getPlayer2().getHand(), winner));
-            startNextRound();// refresh hand
+            // refresh hand
 
         }
 
@@ -43,11 +43,6 @@ class Judge extends Thread {
             return player1;
         else
             return player2;
-    }
-
-    private void startNextRound() {
-        table.getPlayer1().changeHand();
-        table.getPlayer2().changeHand();
     }
 
     public void setTable(GameTable table) {

@@ -15,11 +15,6 @@ class Player extends Thread {
         this.hand = Hand.getRandom();
     }
 
-    public void changeHand() {
-        hand = Hand.getRandom();
-        System.out.println(nr + " hands changed");
-    }
-
     Hand getHand() {
         return hand;
     }
@@ -30,7 +25,6 @@ class Player extends Thread {
 
     @Override
     public void run() {
-
         // TODO warten auf auswertung
     }
 

@@ -8,7 +8,6 @@ import java.util.List;
  *
  */
 class GameTable {
-
     private List<Player> players = new ArrayList<Player>();
 
     void addPlayer(Player player) {
