@@ -28,8 +28,8 @@ enum Hand implements Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            Hand hand = this;
-            table.addHand(hand);
+            System.out.println(this + " put Hand on Table");
+            table.addHand(this);
         }
     }
 }

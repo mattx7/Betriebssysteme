@@ -31,9 +31,10 @@ class Table {
     private synchronized void awaitHands() {
         while (hands.size() < 2) {
             try {
+                System.out.println("awaitHands() waiting");
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("awaitHands() interrupted");
             }
         }
     }
@@ -41,9 +42,10 @@ class Table {
     private synchronized void awaitCleanTable() {
         while (hands.size() > 0) {
             try {
+                System.out.println("awaitCleanTable() waiting");
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("awaitCleanTable() interrupted");
             }
 
         }

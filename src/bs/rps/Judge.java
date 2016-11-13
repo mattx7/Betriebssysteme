@@ -15,6 +15,7 @@ class Judge extends Thread {
     @Override
     public void run() {
         while (!isInterrupted()) {
+            System.out.println("Judge started");
             Hand winner = payoff(); // Runde auswerten
             System.out.println(String.format("[ %s : %s ] Player %s wins", table.getHands().get(0), table.getHands().get(0), winner));
             table.cleanTable();
