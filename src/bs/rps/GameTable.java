@@ -11,10 +11,15 @@ class GameTable {
     private List<Player> players = new ArrayList<Player>();
 
     void addPlayer(Player player) {
-        if (players.size() >= 2)
+        if (players.size() > 2)
             throw new IllegalArgumentException("Not more than 2 Hands on one table");
 
         this.players.add(player);
+
+    }
+
+    void cleanTable() {
+        players.clear();
     }
 
     Player getPlayer1() {

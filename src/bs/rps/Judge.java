@@ -16,11 +16,19 @@ class Judge extends Thread {
     @Override
     public void run() {
         while (!isInterrupted()) {
-            //                notifyAll();
-            //                wait();
 
-            Player winner = payoff(); // Runde auswerten
-            System.out.println(String.format("[ %s : %s ] Player %s wins", table.getPlayer1().getHand(), table.getPlayer2().getHand(), winner));
+            try {
+                wait();
+                Player winner = payoff(); // Runde auswerten
+                System.out.println(String.format("[ %s : %s ] Player %s wins", table.getPlayer1().getHand(), table.getPlayer2().getHand(), winner));
+                table.cleanTable();
+                notifyAll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+
             // refresh hand
 
         }

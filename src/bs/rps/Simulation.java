@@ -6,7 +6,7 @@ package bs.rps;
  */
 public class Simulation {
 
-    Simulation() {
+    Simulation() throws InterruptedException {
         GameTable table = new GameTable();
         Judge judge = new Judge(table);
         Player player1 = new Player(1, table);
@@ -17,6 +17,7 @@ public class Simulation {
 
         player1.start();
         player2.start();
+        wait();
         judge.start();
 
         try {

@@ -58,7 +58,7 @@ class Student extends Thread {
                 // release queue
                 semaphore.release();
 
-                // get in line at shortest queue
+                // get in line at shortest queue and pay
                 shortestQueu.pay(this);
 
                 // eating for 200 ms to 700 ms

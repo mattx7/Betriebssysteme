@@ -25,7 +25,20 @@ class Player extends Thread {
 
     @Override
     public void run() {
-        // TODO warten auf auswertung
+        while (!isInterrupted()) {
+
+            this.hand = Hand.getRandom();
+            table.addPlayer(this);
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        System.out.println(String.format("%s ist fertig", this));
     }
 
     @Override
