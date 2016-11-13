@@ -9,15 +9,27 @@ import java.util.Random;
  * Created by Neak on 01.11.2016.
  *
  */
-enum Hand {
+enum Hand implements Runnable {
     Rock, Paper, Scissors;
 
     private static final List<Hand> VALUES = Collections.unmodifiableList(Arrays.asList(values())); //Liste mit unseren Enums
     private static final int SIZE = VALUES.size(); //Ein Int der so groß ist wie die Anzahl unserer Enums
     private static final Random RANDOM = new Random(); //Random
+    private Table table;
 
     public static Hand getRandom() {
         return VALUES.get(RANDOM.nextInt(SIZE)); //Return ein zufälligen Enum
     }
 
+    void setTable(Table table) {
+        this.table = table;
+    }
+
+    @Override
+    public void run() {
+        while (!Thread.interrupted()) {
+            Hand hand = this;
+            table.addHand(hand);
+        }
+    }
 }
