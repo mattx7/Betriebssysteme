@@ -1,8 +1,8 @@
 //package bs.trash;
 //
-//import bs.rps.Hand;
-//import bs.rps.Judge;
-//import bs.rps.Table;
+//import bs.rps_locks.Hand;
+//import bs.rps_locks.Judge;
+//import bs.rps_locks.Table;
 //
 ///**
 // * Created by Neak on 01.11.2016.

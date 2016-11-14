@@ -1,35 +1,43 @@
-package bs.rps;
+package bs.rps_locks;
+
+import java.util.List;
 
 /**
  * Created by Neak on 12.11.2016.
  *
  */
 class Judge extends Thread {
+    private final Table table;
+    private List<Hand> hands;
 
-    private Table table;
-
-    Judge(Table table) {
+    /**
+     * Constuctor
+     *
+     * @param table Monitor
+     * @param name  of the Thread
+     */
+    Judge(Table table, String name) {
+        super(name);
         this.table = table;
+
     }
 
     @Override
     public void run() {
         while (!isInterrupted()) {
-            System.out.println("Judge started");
             Hand winner = payoff(); // Runde auswerten
-            System.out.println(String.format("[ %s : %s ] Player %s wins", table.getHands().get(0), table.getHands().get(0), winner));
+            System.out.println(String.format("[ %s : %s ] Player %s wins", hands.get(0), hands.get(1), winner));
             table.cleanTable();
-
         }
-        System.out.println("Judge has finished");
     }
 
     /**
-     * @return Winning Player or null if draw
+     * @return Winning Hand or null if draw
      */
     private Hand payoff() {
-        Hand hand1 = table.getHands().get(0);
-        Hand hand2 = table.getHands().get(1);
+        hands = table.getHands();
+        Hand hand1 = hands.get(0);
+        Hand hand2 = hands.get(1);
 
         if (hand1.equals(hand2)) return null;
 
@@ -39,9 +47,5 @@ class Judge extends Thread {
             return hand1;
         else
             return hand2;
-    }
-
-    public void setTable(Table table) {
-        this.table = table;
     }
 }
