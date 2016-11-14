@@ -1,4 +1,4 @@
-package bs.rps;
+package bs.rps_locks;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,10 +17,17 @@ enum Hand implements Runnable {
     private static final Random RANDOM = new Random(); //Random
     private Table table;
 
+    /**
+     * @return random Hand
+     */
     public static Hand getRandom() {
         return VALUES.get(RANDOM.nextInt(SIZE)); //Return ein zufälligen Enum
     }
 
+    /**
+     *
+     * @param table set table
+     */
     void setTable(Table table) {
         this.table = table;
     }
@@ -28,8 +35,7 @@ enum Hand implements Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            System.out.println(this + " put Hand on Table");
-            table.addHand(this);
+            table.addHand(Hand.getRandom());
         }
     }
 }
