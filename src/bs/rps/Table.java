@@ -12,6 +12,7 @@ import java.util.List;
 class Table {
     private List<Hand> hands = new ArrayList<Hand>();
     private List<Thread> player = new LinkedList<Thread>();
+    private int playerOnTable = 2;
 
     /**
      * adds Hands to the table
@@ -19,12 +20,11 @@ class Table {
      * @param hand
      */
     synchronized void addHand(Hand hand) {
-        awaitCleanTable();
+        awaitReadyForPlayer();
+        awaitOtherPlayer();
         System.out.println(Thread.currentThread() + " " + hand + " addHand()");
         this.hands.add(hand);
         notifyAll();
-        awaitOtherPlayer();
-
     }
 
     /**
@@ -48,10 +48,10 @@ class Table {
     }
 
     /**
-     * Semaphore
+     * Wait that Table has two Hands and two Player
      */
     private synchronized void awaitHands() {
-        while (hands.size() < 2 && player.size() < 2) {
+        while (hands.size() < playerOnTable && player.size() < playerOnTable) {
             try {
                 System.out.println(Thread.currentThread() + " await hands");
                 wait();
@@ -63,31 +63,31 @@ class Table {
     }
 
     /**
-     * Semaphore
+     * Wait that Table is ready for Player
      */
-    private synchronized void awaitCleanTable() {
-        while (hands.size() >= 2 && player.size() >= 2) {
+    private synchronized void awaitReadyForPlayer() {
+        while (hands.size() == playerOnTable && player.size() == playerOnTable) {
             try {
                 System.out.println(Thread.currentThread() + " await clean table");
                 wait();
             } catch (InterruptedException e) {
-//                System.out.println(Thread.currentThread()+" awaitCleanTable() interrupted");
+//                System.out.println(Thread.currentThread()+" awaitReadyForPlayer() interrupted");
             }
         }
         System.out.println(Thread.currentThread() + " is awake");
     }
 
     /**
-     * Semaphore
+     * Wait until new Round
      */
     private synchronized void awaitOtherPlayer() {
-        player.add(Thread.currentThread());
         while (player.contains(Thread.currentThread())) {
             try {
                 System.out.println(Thread.currentThread() + " await other player");
                 wait();
             } catch (InterruptedException e) {
 //                System.out.println(Thread.currentThread()+" awaitHands() interrupted");
+                player.add(Thread.currentThread());
             }
         }
         System.out.println(Thread.currentThread() + " is awake");
