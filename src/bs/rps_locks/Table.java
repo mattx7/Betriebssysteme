@@ -11,6 +11,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by Neak on 12.11.2016.
  * <p>
  * MonitorClass
+ *
+ * Referenze
+ * https://de.wikibooks.org/wiki/Java_Standard:_Threads
  */
 class Table {
     private List<Hand> hands = new ArrayList<Hand>();
