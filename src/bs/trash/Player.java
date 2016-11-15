@@ -1,7 +1,7 @@
 //package bs.trash;
 //
-//import bs.rps_locks.GameTable;
-//import bs.rps_locks.Hand;
+//import bs.rps.GameTable;
+//import bs.rps.Hand;
 //
 ///**
 // * Created by Neak on 12.11.2016.

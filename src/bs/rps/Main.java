@@ -1,4 +1,4 @@
-package bs.rps_locks;
+package bs.rps;
 
 /**
  * Created by Neak on 01.11.2016.
@@ -21,10 +21,16 @@ public class Main {
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
+            judge.interrupt();
+            thread1.interrupt();
+            thread2.interrupt();
+            Thread.currentThread().interrupt();
+        } finally {
+            judge.interrupt();
+            thread1.interrupt();
+            thread2.interrupt();
+            Thread.currentThread().interrupt();
         }
-        judge.interrupt();
-        thread1.interrupt();
-        thread2.interrupt();
-        Thread.currentThread().interrupt();
+        // TODO Fehler hört nicht mehr auf
     }
 }
