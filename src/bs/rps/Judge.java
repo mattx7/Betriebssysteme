@@ -8,7 +8,6 @@ import java.util.List;
  */
 class Judge extends Thread {
     private final Table table;
-    private List<Hand> hands;
 
     /**
      * Constuctor
@@ -25,7 +24,8 @@ class Judge extends Thread {
     @Override
     public void run() {
         while (!isInterrupted()) {
-            Hand winner = payoff(); // Runde auswerten
+            List<Hand> hands = table.getHands();
+            Hand winner = payoff(hands); // Runde auswerten
             System.out.println(String.format("[ %s : %s ] Player %s wins", hands.get(0), hands.get(1), winner));
             table.cleanTable();
         }
@@ -34,8 +34,7 @@ class Judge extends Thread {
     /**
      * @return Winning Hand or null if draw
      */
-    private Hand payoff() {
-        hands = table.getHands();
+    private Hand payoff(List<Hand> hands) {
         Hand hand1 = hands.get(0);
         Hand hand2 = hands.get(1);
 
