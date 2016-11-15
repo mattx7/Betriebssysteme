@@ -32,5 +32,6 @@ public class Main {
             Thread.currentThread().interrupt();
         }
         // TODO Fehler hört nicht mehr auf
+        // TODO Hängt sich manchmal auf
     }
 }
