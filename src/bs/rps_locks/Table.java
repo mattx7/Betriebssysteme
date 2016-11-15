@@ -3,6 +3,9 @@ package bs.rps_locks;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Neak on 12.11.2016.
@@ -12,6 +15,12 @@ import java.util.List;
 class Table {
     private List<Hand> hands = new ArrayList<Hand>();
     private List<Thread> player = new LinkedList<Thread>();
+    private int amountOfPlayer = 2;
+
+    private final Lock lockAddHand = new ReentrantLock(true);
+    private final Condition readyForResults = lockAddHand.newCondition();
+    private final Condition readyForPlayer = lockAddHand.newCondition();
+    private final Condition isOtherPlayer = lockAddHand.newCondition();
 
     /**
      * adds Hands to the table
@@ -19,77 +28,70 @@ class Table {
      * @param hand
      */
     synchronized void addHand(Hand hand) {
-        awaitCleanTable();
-        System.out.println(Thread.currentThread() + " " + hand + " addHand()");
-        this.hands.add(hand);
-        notifyAll();
-        awaitOtherPlayer();
-
-    }
-
-    /**
-     * Cleans the table for a new game
-     */
-    synchronized void cleanTable() {
-        awaitHands();
-        hands.clear();
-        player.clear();
-        System.out.println(Thread.currentThread() + " cleanTable()");
-        notifyAll();
+        lockAddHand.lock();
+        try {
+            while (!readyForPlayer()) {
+                System.out.println(Thread.currentThread() + " await readyForPlayer");
+                readyForPlayer.await();
+            }
+            while (!isOtherPlayer()) {
+                System.out.println(Thread.currentThread() + " await otherPlayer");
+                isOtherPlayer.await();
+            }
+            System.out.println(Thread.currentThread() + " " + hand + " addHand()");
+            this.hands.add(hand);
+            readyForResults.signalAll();
+            isOtherPlayer.signalAll();
+        } catch (InterruptedException e) {
+            System.out.println(Thread.currentThread() + " interrupted at addHand()");
+        } finally {
+            lockAddHand.unlock();
+        }
     }
 
     /**
      * @return List of Hands
      */
     synchronized List<Hand> getHands() {
-        awaitHands();
-        System.out.println(Thread.currentThread() + " getHand()");
+        lockAddHand.lock();
+        List<Hand> hands = new ArrayList<>();
+        try {
+            while (!readyForResults()) {
+                System.out.println(Thread.currentThread() + " await readyForResults");
+                readyForResults.await();
+            }
+            System.out.println(Thread.currentThread() + " getHand()");
+            hands = this.hands;
+            cleanTable();
+            readyForPlayer.signal();
+        } catch (InterruptedException e) {
+            System.out.println(Thread.currentThread() + " interrupted at addHand()");
+        } finally {
+            lockAddHand.unlock();
+        }
         return hands;
     }
 
     /**
-     * Semaphore
+     * Cleans the table for a new game
      */
-    private synchronized void awaitHands() {
-        while (hands.size() < 2 && player.size() < 2) {
-            try {
-                System.out.println(Thread.currentThread() + " await hands");
-                wait();
-            } catch (InterruptedException e) {
-//                System.out.println(Thread.currentThread()+" awaitHands() interrupted");
-            }
-        }
-        System.out.println(Thread.currentThread() + " is awake");
+    private synchronized void cleanTable() {
+        hands.clear();
+        player.clear();
+        System.out.println(Thread.currentThread() + " cleanTable()");
     }
 
-    /**
-     * Semaphore
-     */
-    private synchronized void awaitCleanTable() {
-        while (hands.size() >= 2 && player.size() >= 2) {
-            try {
-                System.out.println(Thread.currentThread() + " await clean table");
-                wait();
-            } catch (InterruptedException e) {
-//                System.out.println(Thread.currentThread()+" awaitCleanTable() interrupted");
-            }
-        }
-        System.out.println(Thread.currentThread() + " is awake");
+    private Boolean readyForResults() {
+        return (hands.size() == amountOfPlayer && player.size() == amountOfPlayer);
     }
 
-    /**
-     * Semaphore
-     */
-    private synchronized void awaitOtherPlayer() {
+    private Boolean readyForPlayer() {
+        return (hands.size() < amountOfPlayer && player.size() < amountOfPlayer);
+    }
+
+    private Boolean isOtherPlayer() {
+        Boolean bool = (!player.contains(Thread.currentThread()));
         player.add(Thread.currentThread());
-        while (player.contains(Thread.currentThread())) {
-            try {
-                System.out.println(Thread.currentThread() + " await other player");
-                wait();
-            } catch (InterruptedException e) {
-//                System.out.println(Thread.currentThread()+" awaitHands() interrupted");
-            }
-        }
-        System.out.println(Thread.currentThread() + " is awake");
+        return bool;
     }
 }
