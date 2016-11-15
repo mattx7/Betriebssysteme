@@ -1,4 +1,4 @@
-package bs.rps_locks;
+package bs.rps;
 
 import java.util.Arrays;
 import java.util.Collections;
