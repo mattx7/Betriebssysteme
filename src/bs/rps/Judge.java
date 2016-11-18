@@ -1,5 +1,6 @@
 package bs.rps;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -8,7 +9,9 @@ import java.util.List;
  */
 class Judge extends Thread {
     private final Table table;
-
+    private int roundCounter;
+    private LinkedList<Thread> winners = new LinkedList<>();
+    private List<Hand> winningHands;
     /**
      * Constuctor
      *
@@ -18,18 +21,44 @@ class Judge extends Thread {
     Judge(Table table, String name) {
         super(name);
         this.table = table;
-
+        roundCounter = 0;
+        winners = new LinkedList<>();
+        winningHands = new LinkedList<>();
     }
 
     @Override
     public void run() {
         while (!isInterrupted()) {
             List<Hand> hands = table.getHands();
-            Hand winner = payoff(hands); // Runde auswerten
-            System.out.println(String.format("[ %s : %s ] Player %s wins", hands.get(0), hands.get(1), winner));
+            Hand winner = payoff(hands, table.getPlayers()); // Runde auswerten
+            roundCounter++;
+            System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? null : winners.getLast().getName()), winner));
+            table.cleanTable();
         }
     }
 
+    void printScore() {
+        int th1Wins = 0;
+        int th2Wins = 0;
+        int draws = 0;
+
+        for (Thread thread : winners) {
+            if (thread == null) {
+                draws++;
+            } else if (thread.getName().equals("Hand1")) {
+                th1Wins++;
+            } else if (thread.getName().equals("Hand2")) {
+                th2Wins++;
+            }
+        }
+
+        System.out.println(" ====== SCORE ======");
+        System.out.println("Played Rounds: " + roundCounter);
+        System.out.println("Draws: " + draws);
+        System.out.println("Hand1: " + th1Wins);
+        System.out.println("Hand2: " + th2Wins);
+        System.out.println(" ===================");
+    }
     /**
      * @return Winning Hand or null if draw
      */
