@@ -1,12 +1,13 @@
-package bs.rps_locks;
+package bs.rps;
 
 /**
  * Created by Neak on 01.11.2016.
  */
-public class Main {
+public class MainWithLocks {
 
     public static void main(String[] args) {
-        Table table = new Table(); // Monitor
+        TableWithLocks table = new TableWithLocks(); // Monitor
+        table.activateLog = true;
         Judge judge = new Judge(table, "judge");
         Hand hand1 = Hand.getRandom();
         hand1.setTable(table);

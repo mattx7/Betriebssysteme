@@ -1,4 +1,4 @@
-package bs.rps_locks;
+package bs.rps;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,22 +8,22 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by Neak on 12.11.2016.
- * <p>
- * MonitorClass
+ * <h1>MonitorClass</h1>
  *
- * Referenze
- * https://de.wikibooks.org/wiki/Java_Standard:_Threads
+ * <p><b>References</b></p>
+ * <p>https://de.wikibooks.org/wiki/Java_Standard:_Threads</p>
+ * <p>https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Condition.html</p>
  */
-class Table {
+class TableWithLocks {
     private List<Hand> hands = new ArrayList<Hand>();
     private List<Thread> player = new LinkedList<Thread>();
     private int amountOfPlayer = 2;
+    public boolean activateLog = false;
 
-    private final Lock lockAddHand = new ReentrantLock(true);
-    private final Condition readyForResults = lockAddHand.newCondition();
-    private final Condition readyForPlayer = lockAddHand.newCondition();
-    private final Condition isOtherPlayer = lockAddHand.newCondition();
+    private final Lock mutex = new ReentrantLock(true); // Binäres Semaphor („Mutex“)
+    private final Condition readyForResults = mutex.newCondition();
+    private final Condition readyForPlayer = mutex.newCondition();
+    private final Condition isOtherPlayer = mutex.newCondition();
 
     /**
      * adds Hands to the table
@@ -31,24 +31,24 @@ class Table {
      * @param hand
      */
     synchronized void addHand(Hand hand) {
-        lockAddHand.lock();
+        mutex.lock();
         try {
             while (!readyForPlayer()) {
-                System.out.println(Thread.currentThread() + " await readyForPlayer");
+                if (activateLog) System.out.println(Thread.currentThread() + " await readyForPlayer");
                 readyForPlayer.await();
             }
             while (!isOtherPlayer()) {
-                System.out.println(Thread.currentThread() + " await otherPlayer");
+                if (activateLog) System.out.println(Thread.currentThread() + " await otherPlayer");
                 isOtherPlayer.await();
             }
-            System.out.println(Thread.currentThread() + " " + hand + " addHand()");
+            if (activateLog) System.out.println(Thread.currentThread() + " " + hand + " addHand()");
             this.hands.add(hand);
             readyForResults.signalAll();
             isOtherPlayer.signalAll();
         } catch (InterruptedException e) {
-            System.out.println(Thread.currentThread() + " interrupted at addHand()");
+            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at addHand()");
         } finally {
-            lockAddHand.unlock();
+            mutex.unlock();
         }
     }
 
@@ -56,21 +56,21 @@ class Table {
      * @return List of Hands
      */
     synchronized List<Hand> getHands() {
-        lockAddHand.lock();
+        mutex.lock();
         List<Hand> hands = new ArrayList<>();
         try {
             while (!readyForResults()) {
-                System.out.println(Thread.currentThread() + " await readyForResults");
+                if (activateLog) System.out.println(Thread.currentThread() + " await readyForResults");
                 readyForResults.await();
             }
-            System.out.println(Thread.currentThread() + " getHand()");
+            if (activateLog) System.out.println(Thread.currentThread() + " getHand()");
             hands = this.hands;
             cleanTable();
             readyForPlayer.signal();
         } catch (InterruptedException e) {
-            System.out.println(Thread.currentThread() + " interrupted at addHand()");
+            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at addHand()");
         } finally {
-            lockAddHand.unlock();
+            mutex.unlock();
         }
         return hands;
     }
@@ -81,7 +81,7 @@ class Table {
     private synchronized void cleanTable() {
         hands.clear();
         player.clear();
-        System.out.println(Thread.currentThread() + " cleanTable()");
+        if (activateLog) System.out.println(Thread.currentThread() + " cleanTable()");
     }
 
     private Boolean readyForResults() {

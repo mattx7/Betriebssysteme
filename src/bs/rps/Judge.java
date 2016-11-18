@@ -1,4 +1,4 @@
-package bs.rps_locks;
+package bs.rps;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import java.util.List;
  *
  */
 class Judge extends Thread {
-    private final Table table;
+    private final TableWithLocks table;
 
     /**
      * Constuctor
@@ -15,7 +15,7 @@ class Judge extends Thread {
      * @param table Monitor
      * @param name  of the Thread
      */
-    Judge(Table table, String name) {
+    Judge(TableWithLocks table, String name) {
         super(name);
         this.table = table;
 
