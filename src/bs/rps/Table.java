@@ -66,9 +66,8 @@ class Table {
             if (activateLog) System.out.println(Thread.currentThread() + " getHand()");
             hands = this.hands;
             cleanTable();
-            readyForPlayer.signal();
         } catch (InterruptedException e) {
-            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at addHand()");
+            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getHands()");
         } finally {
             mutex.unlock();
         }
@@ -76,12 +75,47 @@ class Table {
     }
 
     /**
+     * @return List of Hands
+     */
+    synchronized List<Thread> getPlayers() {
+        mutex.lock();
+        List<Thread> players = new ArrayList<>();
+        try {
+            while (!readyForResults()) {
+                if (activateLog) System.out.println(Thread.currentThread() + " await readyForResults");
+                readyForResults.await();
+            }
+            if (activateLog) System.out.println(Thread.currentThread() + " getPlayer()");
+            players = this.player;
+        } catch (InterruptedException e) {
+            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getPlayers()");
+        } finally {
+            mutex.unlock();
+        }
+        return players;
+    }
+
+    /**
      * Cleans the table for a new game
      */
-    private synchronized void cleanTable() {
-        hands.clear();
-        player.clear();
-        if (activateLog) System.out.println(Thread.currentThread() + " cleanTable()");
+    synchronized void cleanTable() {
+        mutex.lock();
+        List<Hand> hands = new ArrayList<>();
+        try {
+            while (!readyForResults()) {
+                if (activateLog) System.out.println(Thread.currentThread() + " await readyForResults");
+                readyForResults.await();
+            }
+            if (activateLog) System.out.println(Thread.currentThread() + " cleanTable()");
+            hands.clear();
+            player.clear();
+            readyForPlayer.signal();
+        } catch (InterruptedException e) {
+            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getPlayers()");
+        } finally {
+            mutex.unlock();
+        }
+
     }
 
     private Boolean readyForResults() {
