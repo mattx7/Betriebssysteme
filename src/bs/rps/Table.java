@@ -32,9 +32,9 @@ class Table {
      */
     synchronized void cleanTable() {
         awaitHands();
+        System.out.println(Thread.currentThread() + " cleanTable()");
         hands.clear();
         player.clear();
-        System.out.println(Thread.currentThread() + " cleanTable()");
         notifyAll();
     }
 
@@ -45,6 +45,15 @@ class Table {
         awaitHands();
         System.out.println(Thread.currentThread() + " getHand()");
         return hands;
+    }
+
+    /**
+     * @return List of Hands
+     */
+    synchronized List<Thread> getPlayers() {
+        awaitHands();
+        System.out.println(Thread.currentThread() + " getPlayer()");
+        return player;
     }
 
     /**
@@ -87,9 +96,9 @@ class Table {
                 wait();
             } catch (InterruptedException e) {
 //                System.out.println(Thread.currentThread()+" awaitHands() interrupted");
-                player.add(Thread.currentThread());
             }
         }
+        player.add(Thread.currentThread());
         System.out.println(Thread.currentThread() + " is awake");
     }
 }
