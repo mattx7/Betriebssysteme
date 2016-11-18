@@ -5,13 +5,13 @@ import java.util.List;
 
 /**
  * Created by Neak on 12.11.2016.
- *
  */
 class Judge extends Thread {
     private final Table table;
     private int roundCounter;
     private LinkedList<Thread> winners = new LinkedList<>();
     private List<Hand> winningHands;
+
     /**
      * Constuctor
      *
@@ -30,10 +30,12 @@ class Judge extends Thread {
     public void run() {
         while (!isInterrupted()) {
             List<Hand> hands = table.getHands();
-            Hand winner = payoff(hands, table.getPlayers()); // Runde auswerten
-            roundCounter++;
-            System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? null : winners.getLast().getName()), winner));
-            table.cleanTable();
+            if (hands != null) {
+                Hand winner = payoff(hands, table.getPlayers()); // Runde auswerten
+                roundCounter++;
+                System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? null : winners.getLast().getName()), winner));
+                table.cleanTable();
+            }
         }
     }
 

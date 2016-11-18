@@ -22,6 +22,7 @@ public class Main {
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
+            System.err.println(e);
         }
         judge.interrupt();
         thread1.interrupt();

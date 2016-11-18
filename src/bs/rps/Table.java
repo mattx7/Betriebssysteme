@@ -1,10 +1,11 @@
 package bs.rps;
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -20,7 +21,7 @@ class Table {
     private int amountOfPlayer = 2;
     public boolean activateLog = false;
 
-    private final Lock mutex = new ReentrantLock(true); // Binäres Semaphor („Mutex“)
+    private final ReentrantLock mutex = new ReentrantLock(true); // Binäres Semaphor („Mutex“)
     private final Condition readyForResults = mutex.newCondition();
     private final Condition readyForPlayer = mutex.newCondition();
     private final Condition isOtherPlayer = mutex.newCondition();
@@ -32,6 +33,7 @@ class Table {
      */
     synchronized void addHand(Hand hand) {
         mutex.lock();
+        if (activateLog) System.out.println(Thread.currentThread() + " entered addHand()");
         try {
             while (!readyForPlayer()) {
                 if (activateLog) System.out.println(Thread.currentThread() + " await readyForPlayer");
@@ -41,8 +43,10 @@ class Table {
                 if (activateLog) System.out.println(Thread.currentThread() + " await otherPlayer");
                 isOtherPlayer.await();
             }
-            if (activateLog) System.out.println(Thread.currentThread() + " " + hand + " addHand()");
+            if (activateLog)
+                System.out.println(Thread.currentThread() + " sets " + hand + " on table | Queue: " + mutex.getQueueLength());
             this.hands.add(hand);
+            player.add(Thread.currentThread());
             readyForResults.signalAll();
             isOtherPlayer.signalAll();
         } catch (InterruptedException e) {
@@ -55,28 +59,32 @@ class Table {
     /**
      * @return List of Hands
      */
+    @Nullable
     synchronized List<Hand> getHands() {
         mutex.lock();
+        if (activateLog) System.out.println(Thread.currentThread() + " entered getHands()");
         List<Hand> hands = new ArrayList<>();
         try {
             while (!readyForResults()) {
                 if (activateLog) System.out.println(Thread.currentThread() + " await readyForResults");
                 readyForResults.await();
             }
-            if (activateLog) System.out.println(Thread.currentThread() + " getHand()");
+            if (activateLog)
+                System.out.println(Thread.currentThread() + " getHand() | Queue: " + mutex.getQueueLength());
             hands = this.hands;
-            cleanTable();
+            mutex.unlock();
+            return hands;
         } catch (InterruptedException e) {
             if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getHands()");
-        } finally {
             mutex.unlock();
+            return null;
         }
-        return hands;
     }
 
     /**
      * @return List of Hands
      */
+    @Nullable
     synchronized List<Thread> getPlayers() {
         mutex.lock();
         List<Thread> players = new ArrayList<>();
@@ -86,13 +94,13 @@ class Table {
                 readyForResults.await();
             }
             if (activateLog) System.out.println(Thread.currentThread() + " getPlayer()");
-            players = this.player;
+            mutex.unlock();
+            return this.player;
         } catch (InterruptedException e) {
             if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getPlayers()");
-        } finally {
             mutex.unlock();
+            return null;
         }
-        return players;
     }
 
     /**
@@ -100,15 +108,14 @@ class Table {
      */
     synchronized void cleanTable() {
         mutex.lock();
-        List<Hand> hands = new ArrayList<>();
         try {
             while (!readyForResults()) {
                 if (activateLog) System.out.println(Thread.currentThread() + " await readyForResults");
                 readyForResults.await();
             }
             if (activateLog) System.out.println(Thread.currentThread() + " cleanTable()");
-            hands.clear();
-            player.clear();
+            this.hands.clear();
+            this.player.clear();
             readyForPlayer.signal();
         } catch (InterruptedException e) {
             if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getPlayers()");
@@ -127,8 +134,6 @@ class Table {
     }
 
     private Boolean isOtherPlayer() {
-        Boolean bool = (!player.contains(Thread.currentThread()));
-        player.add(Thread.currentThread());
-        return bool;
+        return (!player.contains(Thread.currentThread()));
     }
 }
