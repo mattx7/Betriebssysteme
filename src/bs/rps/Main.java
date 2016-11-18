@@ -3,10 +3,10 @@ package bs.rps;
 /**
  * Created by Neak on 01.11.2016.
  */
-public class MainWithLocks {
+public class Main {
 
     public static void main(String[] args) {
-        TableWithLocks table = new TableWithLocks(); // Monitor
+        Table table = new Table(); // Monitor
         table.activateLog = true;
         Judge judge = new Judge(table, "judge");
         Hand hand1 = Hand.getRandom();

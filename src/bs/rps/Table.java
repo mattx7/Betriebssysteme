@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>https://de.wikibooks.org/wiki/Java_Standard:_Threads</p>
  * <p>https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Condition.html</p>
  */
-class TableWithLocks {
+class Table {
     private List<Hand> hands = new ArrayList<Hand>();
     private List<Thread> player = new LinkedList<Thread>();
     private int amountOfPlayer = 2;
