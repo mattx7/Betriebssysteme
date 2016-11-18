@@ -59,20 +59,30 @@ class Judge extends Thread {
         System.out.println("Hand2: " + th2Wins);
         System.out.println(" ===================");
     }
+
     /**
      * @return Winning Hand or null if draw
      */
-    private Hand payoff(List<Hand> hands) {
+    private Hand payoff(List<Hand> hands, List<Thread> player) {
         Hand hand1 = hands.get(0);
         Hand hand2 = hands.get(1);
 
-        if (hand1.equals(hand2)) return null;
+        if (hand1.equals(hand2)) {
+            winners.add(null);
+            winningHands.add(null);
+            return null;
+        }
 
         if ((hand1.equals(Hand.Rock) & hand2.equals(Hand.Scissors)) ||
                 (hand1.equals(Hand.Scissors) & hand2.equals(Hand.Paper)) ||
-                (hand1.equals(Hand.Paper) & hand2.equals(Hand.Rock)))
+                (hand1.equals(Hand.Paper) & hand2.equals(Hand.Rock))) {
+            winners.add(player.get(0));
+            winningHands.add(hand1);
             return hand1;
-        else
+        } else {
+            winners.add(player.get(1));
+            winningHands.add(hand2);
             return hand2;
+        }
     }
 }
