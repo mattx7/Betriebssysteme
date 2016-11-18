@@ -3,10 +3,10 @@ package bs.rps;
 /**
  * Created by Neak on 01.11.2016.
  */
-public class Main {
+public class MainForMonitor {
 
     public static void main(String[] args) {
-        Table table = new Table(); // Monitor
+        TableMonitor table = new TableMonitor(); // Monitor
         Judge judge = new Judge(table, "judge");
         Hand hand1 = Hand.getRandom();
         hand1.setTable(table);

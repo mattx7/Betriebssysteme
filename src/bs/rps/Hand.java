@@ -15,7 +15,7 @@ enum Hand implements Runnable {
     private static final List<Hand> VALUES = Collections.unmodifiableList(Arrays.asList(values())); //Liste mit unseren Enums
     private static final int SIZE = VALUES.size(); //Ein Int der so groß ist wie die Anzahl unserer Enums
     private static final Random RANDOM = new Random(); //Random
-    private Table table;
+    private TableMonitor table;
 
     /**
      * @return random Hand
@@ -28,7 +28,7 @@ enum Hand implements Runnable {
      *
      * @param table set table
      */
-    void setTable(Table table) {
+    void setTable(TableMonitor table) {
         this.table = table;
     }
 

@@ -7,7 +7,7 @@ import java.util.List;
  *
  */
 class Judge extends Thread {
-    private final Table table;
+    private final TableMonitor table;
 
     /**
      * Constuctor
@@ -15,7 +15,7 @@ class Judge extends Thread {
      * @param table Monitor
      * @param name  of the Thread
      */
-    Judge(Table table, String name) {
+    Judge(TableMonitor table, String name) {
         super(name);
         this.table = table;
 
