@@ -36,7 +36,6 @@ class Checkout {
 
     /**
      * The payment at checkout
-     * !!Blocks if payment is blocked by other persons in the waiting queue!!
      *
      * @param student student who pays
      * @throws InterruptedException if interrupts

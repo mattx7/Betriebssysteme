@@ -55,7 +55,7 @@ class Student extends Thread {
             }
         }
 
-        System.out.println(String.format("%s ist fertig", this));
+        System.out.println(String.format("%s is done", this));
     }
 
     @Override

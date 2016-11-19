@@ -20,7 +20,7 @@ class Simulation {
 
     void startSimulation() {
         // initialize semaphore
-        Semaphore sem = new Semaphore(1);
+        Semaphore semaphore = new Semaphore(1);
         // initialize checkouts
         List<Checkout> checkouts = new ArrayList<Checkout>();
         for (int j = 0; j < amountOfCheckouts; j++) {
@@ -29,9 +29,9 @@ class Simulation {
         // initialize students
         List<Student> students = new ArrayList<Student>();
         for (int i = 0; i < AmountOfStudents; i++) {
-            Student stud = new Student(i+1, checkouts, sem);
-            stud.start();
-            students.add(stud);
+            Student student = new Student(i + 1, checkouts, semaphore);
+            student.start();
+            students.add(student);
         }
 
         System.out.println("==== Checkout opens ====");
@@ -43,8 +43,8 @@ class Simulation {
             Thread.currentThread().interrupt();
         } finally {
             // interrupt all students
-            for(Student stud : students) {
-                stud.interrupt();
+            for (Student student : students) {
+                student.interrupt();
                 //System.out.println(String.format("%s interrupted", stud));
             }
         }
