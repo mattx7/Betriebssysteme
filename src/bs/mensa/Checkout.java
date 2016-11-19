@@ -11,9 +11,7 @@ import java.util.concurrent.Semaphore;
 class Checkout {
 
     private List<Student> waitingQueue = new ArrayList<>();
-
     private Semaphore semaphore = new Semaphore(1, true);
-
     private int number;
 
     Checkout(int number) {
@@ -32,7 +30,7 @@ class Checkout {
     /**
      * Add a student to the waiting queue
      *
-     * @param student
+     * @param student adds to queue
      */
     void add(Student student) {
         waitingQueue.add(student);
@@ -46,7 +44,6 @@ class Checkout {
      * @throws InterruptedException
      */
     void pay(Student student) throws InterruptedException {
-        // acquire payment semaphore
         semaphore.acquire();
 
         try {
@@ -57,13 +54,8 @@ class Checkout {
             Thread.currentThread().interrupt();
         }
 
-        // print info
         System.out.println(String.format("%s payed at Checkout %d while %d students are still waiting", student, number, getQueueSize()-1));
-
-        // remove the student from the queue after he has paid
         waitingQueue.remove(student);
-
-        // release the blocked checkout
         semaphore.release();
     }
 }

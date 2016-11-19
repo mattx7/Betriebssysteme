@@ -1,53 +1,22 @@
-/**
- * @startuml
- * Simulation -- Checkout
- * Simulation -- Student
- * Simulation -- SimulationException
- *
- * Simulation:void start()
- *
- * SimulationException:
- *
- * Checkout:Semaphore semaphore
- * Checkout:List<Student> waitingLine
- * Checkout:int getQueueSize()
- * Checkout:void add(Student student)
- * Checkout:void pay(Student student)
- *
- * Student:List<Checkout> checkouts
- * Student:Semaphore semaphore
- * Student:void run()
- * @enduml
- */
 package bs.mensa;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-/**
- * Simulation
- *
- */
 class Simulation {
-
     private final int runtime;
+    private int amountOfCheckouts = 0;
+    private int AmountOfStudents = 0;
 
-    private int checkoutCount = 0;
-
-    private int studentCount = 0;
-
-    Simulation(int checkoutCount, int studentCount, int runtime) {
-        this.checkoutCount = checkoutCount;
-        this.studentCount = studentCount;
+    Simulation(int amountOfCheckouts, int AmountOfStudents, int runtime) {
+        this.amountOfCheckouts = amountOfCheckouts;
+        this.AmountOfStudents = AmountOfStudents;
         this.runtime = runtime;
     }
 
     /**
      * Run simulation
-     * First initializes checkouts and students.
-     * Every student thread will be started.
-     * Simulation will stop after the given amount of seconds.
      *
      * @throws SimulationException
      */
@@ -58,13 +27,13 @@ class Simulation {
 
         // initialize checkouts
         List<Checkout> checkouts = new ArrayList<Checkout>();
-        for(int j = 0 ; j < checkoutCount ; j++) {
+        for (int j = 0; j < amountOfCheckouts; j++) {
             checkouts.add(new Checkout(j+1));
         }
 
         // initialize students
         List<Student> students = new ArrayList<Student>();
-        for(int i = 0 ; i < studentCount ; i++) {
+        for (int i = 0; i < AmountOfStudents; i++) {
             Student stud = new Student(i+1, checkouts, sem);
             stud.start();
             students.add(stud);
