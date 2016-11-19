@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+/**
+ * Created by MattX7 on 09.11.2016.
+ */
 class Simulation {
     private final int runtime;
     private int amountOfCheckouts = 0;
@@ -15,22 +18,14 @@ class Simulation {
         this.runtime = runtime;
     }
 
-    /**
-     * Run simulation
-     *
-     * @throws SimulationException
-     */
-    void start() throws SimulationException {
-
+    void startSimulation() {
         // initialize semaphore
         Semaphore sem = new Semaphore(1);
-
         // initialize checkouts
         List<Checkout> checkouts = new ArrayList<Checkout>();
         for (int j = 0; j < amountOfCheckouts; j++) {
             checkouts.add(new Checkout(j+1));
         }
-
         // initialize students
         List<Student> students = new ArrayList<Student>();
         for (int i = 0; i < AmountOfStudents; i++) {

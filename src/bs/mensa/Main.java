@@ -1,5 +1,8 @@
 package bs.mensa;
 
+/**
+ * Created by Neak on 01.11.2016.
+ */
 public class Main {
     private static final int AMOUNT_OF_STUDENTS = 10;
     private static final int AMOUNT_OF_CHECKOUTS = 2;
@@ -7,12 +10,11 @@ public class Main {
     private static final int RUNTIME = 2;
 
     public static void main(String[] args) {
-        // initialize simulation
-        Simulation sim = new Simulation(AMOUNT_OF_CHECKOUTS, AMOUNT_OF_STUDENTS, RUNTIME);
+        Simulation simulation = new Simulation(AMOUNT_OF_CHECKOUTS, AMOUNT_OF_STUDENTS, RUNTIME);
 
         try {
-            sim.start();
-        } catch (SimulationException e) {
+            simulation.startSimulation();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

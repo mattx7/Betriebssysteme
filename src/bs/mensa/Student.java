@@ -4,29 +4,16 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
- * Student
- *
+ * Created by Neak on 01.11.2016.
  */
 class Student extends Thread {
-
     private List<Checkout> checkouts;
-
     private Semaphore semaphore;
-
     private int number;
 
-    /**
-     * Constructs a new student
-     * The thread does not start automatically.
-     * At least one checkout has to be in the list. Otherwise an SimulationException will be thrown.
-     *
-     * @param checkouts
-     * @param semaphore
-     * @throws SimulationException
-     */
-    Student(int number, List<Checkout> checkouts, Semaphore semaphore) throws SimulationException {
+    Student(int number, List<Checkout> checkouts, Semaphore semaphore) throws IllegalArgumentException {
         if(checkouts.size() < 1)
-            throw new SimulationException("The mensa needs to have at least one checkout.");
+            throw new IllegalArgumentException("The mensa needs to have at least one checkout.");
 
         this.number = number;
         this.checkouts = checkouts;
@@ -46,18 +33,16 @@ class Student extends Thread {
 
                 // check queue for all checkouts
                 Checkout shortestQueu = checkouts.get(0);
-                for (Checkout checkCheckout : checkouts) {
-                    if(checkCheckout.getQueueSize() < shortestQueu.getQueueSize()) {
-                        shortestQueu = checkCheckout;
+                for (Checkout next : checkouts) {
+                    if (next.getQueueSize() < shortestQueu.getQueueSize()) {
+                        shortestQueu = next;
                     }
                 }
 
                 // get student into queue
                 shortestQueu.add(this);
-
                 // release queue
                 semaphore.release();
-
                 // get in line at shortest queue and pay
                 shortestQueu.pay(this);
 

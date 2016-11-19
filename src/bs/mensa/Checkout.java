@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
- * Checkout object that is used by students in the checkout process
- *
+ * Created by Neak on 01.11.2016.
  */
 class Checkout {
-
     private List<Student> waitingQueue = new ArrayList<>();
     private Semaphore semaphore = new Semaphore(1, true);
     private int number;
@@ -40,8 +38,8 @@ class Checkout {
      * The payment at checkout
      * !!Blocks if payment is blocked by other persons in the waiting queue!!
      *
-     * @param student
-     * @throws InterruptedException
+     * @param student student who pays
+     * @throws InterruptedException if interrupts
      */
     void pay(Student student) throws InterruptedException {
         semaphore.acquire();
