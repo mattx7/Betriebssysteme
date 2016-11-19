@@ -14,6 +14,7 @@ public class Main {
         hand2.setTable(table);
         Thread thread1 = new Thread(hand1, "Hand1");
         Thread thread2 = new Thread(hand2, "Hand2");
+
         thread1.start();
         thread2.start();
         judge.start();
@@ -21,17 +22,13 @@ public class Main {
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
+        } finally {
             thread1.interrupt();
-            thread2.interrupt();
+            thread1.interrupt();
             judge.printScore();
             judge.interrupt();
             Thread.currentThread().interrupt();
         }
-        thread1.interrupt();
-        thread2.interrupt();
-        judge.printScore();
-        judge.interrupt();
-        Thread.currentThread().interrupt();
         // TODO Fehler hört nicht mehr auf
         // TODO Hängt sich manchmal auf
     }

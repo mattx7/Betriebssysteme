@@ -7,7 +7,6 @@ import java.util.Random;
 
 /**
  * Created by Neak on 01.11.2016.
- *
  */
 enum Hand implements Runnable {
     Rock, Paper, Scissors;
@@ -25,7 +24,6 @@ enum Hand implements Runnable {
     }
 
     /**
-     *
      * @param table set table
      */
     void setTable(Table table) {
@@ -34,8 +32,14 @@ enum Hand implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.interrupted()) {
-            table.addHand(Hand.getRandom());
+        System.out.println("Running " + Thread.currentThread().getName());
+        try {
+            while (!Thread.interrupted()) {
+                table.addHand(Hand.getRandom());
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Thread " + Thread.currentThread().getName() + " interrupted.");
         }
+        System.out.println("Thread " + Thread.currentThread().getName() + " exiting.");
     }
 }
