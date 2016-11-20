@@ -73,14 +73,13 @@ class Table {
             if (activateLog)
                 System.out.println(Thread.currentThread() + " getHand() | Queue: " + mutex.getQueueLength());
             hands = this.hands;
-            mutex.unlock();
-            return hands;
         } catch (InterruptedException e) {
             e.fillInStackTrace();
             throw e;
         } finally {
             mutex.unlock();
         }
+        return hands;
     }
 
     /**
@@ -96,14 +95,13 @@ class Table {
                 readyForResults.await();
             }
             if (activateLog) System.out.println(Thread.currentThread() + " getPlayer()");
-            mutex.unlock();
-            return this.player;
         } catch (InterruptedException e) {
             e.fillInStackTrace();
             throw e;
         } finally {
             mutex.unlock();
         }
+        return this.player;
     }
 
     /**
