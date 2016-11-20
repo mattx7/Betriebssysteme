@@ -28,15 +28,22 @@ class Judge extends Thread {
 
     @Override
     public void run() {
-        while (!isInterrupted()) {
-            List<Hand> hands = table.getHands();
-            if (hands != null) {
-                Hand winner = payoff(hands, table.getPlayers()); // Runde auswerten
-                roundCounter++;
-                System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? null : winners.getLast().getName()), winner));
-                table.cleanTable();
+        System.out.println("Running " + Thread.currentThread().getName());
+        try {
+            while (!isInterrupted()) {
+                List<Hand> hands = table.getHands();
+                if (hands != null) {
+                    Hand winner = payoff(hands, table.getPlayers()); // Runde auswerten
+                    roundCounter++;
+                    System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? null : winners.getLast().getName()), winner));
+                    table.cleanTable();
+                }
             }
+        } catch (InterruptedException e) {
+            System.out.println("Thread " + Thread.currentThread().getName() + " interrupted.");
         }
+        System.out.println("Thread " + Thread.currentThread().getName() + " exiting.");
+
     }
 
     void printScore() {

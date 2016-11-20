@@ -31,7 +31,7 @@ class Table {
      *
      * @param hand
      */
-    synchronized void addHand(Hand hand) {
+    synchronized void addHand(Hand hand) throws InterruptedException {
         mutex.lock();
         if (activateLog) System.out.println(Thread.currentThread() + " entered addHand()");
         try {
@@ -50,7 +50,8 @@ class Table {
             readyForResults.signalAll();
             isOtherPlayer.signalAll();
         } catch (InterruptedException e) {
-            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at addHand()");
+            e.fillInStackTrace();
+            throw e;
         } finally {
             mutex.unlock();
         }
@@ -60,7 +61,7 @@ class Table {
      * @return List of Hands
      */
     @Nullable
-    synchronized List<Hand> getHands() {
+    synchronized List<Hand> getHands() throws InterruptedException {
         mutex.lock();
         if (activateLog) System.out.println(Thread.currentThread() + " entered getHands()");
         List<Hand> hands = new ArrayList<>();
@@ -75,9 +76,10 @@ class Table {
             mutex.unlock();
             return hands;
         } catch (InterruptedException e) {
-            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getHands()");
+            e.fillInStackTrace();
+            throw e;
+        } finally {
             mutex.unlock();
-            return null;
         }
     }
 
@@ -85,7 +87,7 @@ class Table {
      * @return List of Hands
      */
     @Nullable
-    synchronized List<Thread> getPlayers() {
+    synchronized List<Thread> getPlayers() throws InterruptedException {
         mutex.lock();
         List<Thread> players = new ArrayList<>();
         try {
@@ -97,16 +99,17 @@ class Table {
             mutex.unlock();
             return this.player;
         } catch (InterruptedException e) {
-            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getPlayers()");
+            e.fillInStackTrace();
+            throw e;
+        } finally {
             mutex.unlock();
-            return null;
         }
     }
 
     /**
      * Cleans the table for a new game
      */
-    synchronized void cleanTable() {
+    synchronized void cleanTable() throws InterruptedException {
         mutex.lock();
         try {
             while (!readyForResults()) {
@@ -118,7 +121,8 @@ class Table {
             this.player.clear();
             readyForPlayer.signal();
         } catch (InterruptedException e) {
-            if (activateLog) System.out.println(Thread.currentThread() + " interrupted at getPlayers()");
+            e.fillInStackTrace();
+            throw e;
         } finally {
             mutex.unlock();
         }
