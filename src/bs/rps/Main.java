@@ -24,9 +24,10 @@ public class Main {
         } catch (InterruptedException e) {
             System.err.println(e);
         }
-        judge.interrupt();
         thread1.interrupt();
         thread2.interrupt();
+        judge.interrupt();
+        judge.printScore();
         Thread.currentThread().interrupt();
     }
 }
