@@ -10,7 +10,6 @@ class Judge extends Thread {
     private final Table table;
     private int roundCounter;
     private LinkedList<Thread> winners = new LinkedList<>();
-    private List<Hand> winningHands;
 
     /**
      * Constuctor
@@ -23,7 +22,6 @@ class Judge extends Thread {
         this.table = table;
         roundCounter = 0;
         winners = new LinkedList<>();
-        winningHands = new LinkedList<>();
     }
 
     @Override
@@ -78,7 +76,6 @@ class Judge extends Thread {
 
         if (hand1.equals(hand2)) {
             winners.add(null);
-            winningHands.add(null);
             return null;
         }
 
@@ -86,11 +83,9 @@ class Judge extends Thread {
                 (hand1.equals(Hand.Scissors) & hand2.equals(Hand.Paper)) ||
                 (hand1.equals(Hand.Paper) & hand2.equals(Hand.Rock))) {
             winners.add(player.get(0));
-            winningHands.add(hand1);
             return hand1;
         } else {
             winners.add(player.get(1));
-            winningHands.add(hand2);
             return hand2;
         }
     }
