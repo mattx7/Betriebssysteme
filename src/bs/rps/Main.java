@@ -22,14 +22,13 @@ public class Main {
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
+            System.err.println(e);
         } finally {
             thread1.interrupt();
-            thread1.interrupt();
-            judge.printScore();
+            thread2.interrupt();
             judge.interrupt();
+            judge.printScore();
             Thread.currentThread().interrupt();
         }
-        // TODO Fehler hört nicht mehr auf
-        // TODO Hängt sich manchmal auf
     }
 }
