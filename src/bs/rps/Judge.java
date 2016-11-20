@@ -44,29 +44,6 @@ class Judge extends Thread {
 
     }
 
-    void printScore() {
-        int th1Wins = 0;
-        int th2Wins = 0;
-        int draws = 0;
-
-        for (Thread thread : winners) {
-            if (thread == null) {
-                draws++;
-            } else if (thread.getName().equals("Hand1")) {
-                th1Wins++;
-            } else if (thread.getName().equals("Hand2")) {
-                th2Wins++;
-            }
-        }
-
-        System.out.println(" ====== SCORE ======");
-        System.out.println("Played Rounds: " + roundCounter);
-        System.out.println("Draws: " + draws);
-        System.out.println("Hand1: " + th1Wins);
-        System.out.println("Hand2: " + th2Wins);
-        System.out.println(" ===================");
-    }
-
     /**
      * @return Winning Hand or null if draw
      */
@@ -88,5 +65,31 @@ class Judge extends Thread {
             winners.add(player.get(1));
             return hand2;
         }
+    }
+
+    /**
+     * print results
+     */
+    void printScore() {
+        int th1Wins = 0;
+        int th2Wins = 0;
+        int draws = 0;
+
+        for (Thread thread : winners) {
+            if (thread == null) {
+                draws++;
+            } else if (thread.getName().equals("Hand1")) {
+                th1Wins++;
+            } else if (thread.getName().equals("Hand2")) {
+                th2Wins++;
+            }
+        }
+
+        System.out.println(" ====== SCORE ======");
+        System.out.println("Played Rounds: " + roundCounter);
+        System.out.println("Draws: " + draws);
+        System.out.println("Hand1: " + th1Wins);
+        System.out.println("Hand2: " + th2Wins);
+        System.out.println(" ===================");
     }
 }
