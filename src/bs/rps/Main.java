@@ -14,7 +14,6 @@ public class Main {
         hand2.setTable(table);
         Thread thread1 = new Thread(hand1, "Hand1");
         Thread thread2 = new Thread(hand2, "Hand2");
-
         thread1.start();
         thread2.start();
         judge.start();
