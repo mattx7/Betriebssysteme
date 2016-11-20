@@ -23,11 +23,12 @@ public class Main {
             Thread.sleep(50);
         } catch (InterruptedException e) {
             System.err.println(e);
+        } finally {
+            thread1.interrupt();
+            thread2.interrupt();
+            judge.interrupt();
+            judge.printScore();
+            Thread.currentThread().interrupt();
         }
-        thread1.interrupt();
-        thread2.interrupt();
-        judge.interrupt();
-        judge.printScore();
-        Thread.currentThread().interrupt();
     }
 }
