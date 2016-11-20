@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <h1>MonitorClass</h1>
- *
+ * <p>
  * <p><b>References</b></p>
  * <p>https://de.wikibooks.org/wiki/Java_Standard:_Threads</p>
  * <p>https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Condition.html</p>
@@ -35,27 +35,28 @@ class Table {
     void addHand(Hand hand) throws InterruptedException {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered addHand()");
-        try {
-            while (!readyForPlayer() && !Thread.interrupted()) {
-                if (log && debugLog) System.out.println(Thread.currentThread() + " await readyForPlayer in addHand()");
-                readyForPlayer.await();
-            }
-            while (!isOtherPlayer() && !Thread.interrupted()) {
-                if (log && debugLog) System.out.println(Thread.currentThread() + " await otherPlayer in addHand()");
-                isOtherPlayer.await();
-            }
-            if (log)
-                System.out.println(Thread.currentThread() + " sets " + hand + " on table | Queue: " + mutex.getQueueLength());
-            this.hands.add(hand);
-            players.add(Thread.currentThread());
-            readyForResults.signalAll();
-            isOtherPlayer.signalAll();
-        } catch (InterruptedException e) {
-            e.fillInStackTrace();
-            throw e;
-        } finally {
-            mutex.unlock();
+
+        while (!readyForPlayer() && !Thread.interrupted()) {
+            if (log && debugLog) System.out.println(Thread.currentThread() + " await readyForPlayer in addHand()");
+            readyForPlayer.await();
         }
+
+        while (!isOtherPlayer() && !Thread.interrupted()) {
+            if (log && debugLog) System.out.println(Thread.currentThread() + " await otherPlayer in addHand()");
+            isOtherPlayer.await();
+        }
+
+        if (log)
+            System.out.println(Thread.currentThread() + " sets " + hand + " on table | Queue: " + mutex.getQueueLength());
+        this.hands.add(hand);
+        players.add(Thread.currentThread());
+        if (readyForResults()) {
+            readyForResults.signalAll();
+        } else {
+            isOtherPlayer.signalAll();
+        }
+
+        mutex.unlock();
     }
 
     /**
@@ -65,21 +66,15 @@ class Table {
     List<Hand> getHands() throws InterruptedException {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
-        List<Hand> hands = new ArrayList<>();
-        try {
-            while (!readyForResults() && !Thread.interrupted()) {
-                if (log && debugLog)
-                    System.out.println(Thread.currentThread() + " await readyForResults in getHands()");
-                readyForResults.await();
-            }
-            if (log) System.out.println(Thread.currentThread() + " getHand() | Queue: " + mutex.getQueueLength());
-            hands = this.hands;
-        } catch (InterruptedException e) {
-            e.fillInStackTrace();
-            throw e;
-        } finally {
-            mutex.unlock();
+
+        while (!readyForResults() && !Thread.interrupted()) {
+            if (log && debugLog)
+                System.out.println(Thread.currentThread() + " await readyForResults in getHands()");
+            readyForResults.await();
         }
+
+        if (log) System.out.println(Thread.currentThread() + " getHand() | Queue: " + mutex.getQueueLength());
+        mutex.unlock();
         return hands;
     }
 
@@ -90,46 +85,38 @@ class Table {
     List<Thread> getPlayers() throws InterruptedException {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
-        List<Thread> players = new ArrayList<>();
-        try {
-            while (!readyForResults() && !Thread.interrupted()) {
-                if (log && debugLog)
-                    System.out.println(Thread.currentThread() + " await readyForResults in getPlayers()");
-                readyForResults.await();
-            }
-            if (log) System.out.println(Thread.currentThread() + " getPlayers() | Queue: " + mutex.getQueueLength());
-            players = this.players;
-        } catch (InterruptedException e) {
-            e.fillInStackTrace();
-            throw e;
-        } finally {
-            mutex.unlock();
+
+        while (!readyForResults() && !Thread.interrupted()) {
+            if (log && debugLog)
+                System.out.println(Thread.currentThread() + " await readyForResults in getPlayers()");
+            readyForResults.await();
         }
-        return players;
+
+        if (log) System.out.println(Thread.currentThread() + " getPlayers() | Queue: " + mutex.getQueueLength());
+        mutex.unlock();
+        return this.players;
     }
 
     /**
      * Cleans the table for a new game
      */
+
     void cleanTable() throws InterruptedException {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered cleanTable()");
-        try {
-            while (!readyForResults() && !Thread.interrupted()) {
-                if (log && debugLog)
-                    System.out.println(Thread.currentThread() + " await readyForResults in cleanTable()");
-                readyForResults.await();
-            }
-            if (log) System.out.println(Thread.currentThread() + " cleanTable()");
-            this.hands.clear();
-            this.players.clear();
-            readyForPlayer.signal();
-        } catch (InterruptedException e) {
-            e.fillInStackTrace();
-            throw e;
-        } finally {
-            mutex.unlock();
+
+        while (!readyForResults() && !Thread.interrupted()) {
+            if (log && debugLog)
+                System.out.println(Thread.currentThread() + " await readyForResults in cleanTable()");
+            readyForResults.await();
         }
+
+        if (log) System.out.println(Thread.currentThread() + " cleanTable()");
+        this.hands.clear();
+        this.players.clear();
+        readyForPlayer.signal();
+
+        mutex.unlock();
     }
 
     private Boolean readyForResults() {
