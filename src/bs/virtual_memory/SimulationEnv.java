@@ -8,7 +8,7 @@ package bs.virtual_memory;
  * Initialisierung der Simulationsumgebung, Start/Ende der Simulation und
  * Auswertung
  *
- * @author Martin H�bner
+ * @author Martin Häbner
  */
 public class SimulationEnv {
 
@@ -18,7 +18,7 @@ public class SimulationEnv {
     public static int simulationTime;
 
     /**
-     * Anzahl an erzeugten Prozessen (1 reicht f�r die Auswertung der
+     * Anzahl an erzeugten Prozessen (1 reicht fär die Auswertung der
      * Seitenfehlerrate)
      */
     public static final int NUM_OF_PROCESSES = 1;
@@ -42,7 +42,7 @@ public class SimulationEnv {
         // ------------------------------------------
         // Dauer der Simulation in ms
         simulationTime = 200;
-        // max. Anzahl Seiten pro Prozess im Hauptspeicher (sonst Verdr�ngung
+        // max. Anzahl Seiten pro Prozess im Hauptspeicher (sonst Verdrängung
         // eigener Seiten)
         os.setMAX_RAM_PAGES_PER_PROCESS(10);
         // CLOCK oder FIFO oder RANDOM
@@ -50,20 +50,20 @@ public class SimulationEnv {
         // Anzahl Operationen innerhalb eines Seitenbereichs
         os.setDEFAULT_LOCALITY_FACTOR(1);
 
-        // Testausgaben erw�nscht? Wenn true, dann simulationTime auf max. 200
+        // Testausgaben erwänscht? Wenn true, dann simulationTime auf max. 200
         // ms setzen!
         os.setTestMode(true);
 
         // ------------------------- Parameter setzen Ende
         // -----------------------------------------------
 
-        // Erzeugen von unabh�ngigen Prozessen
+        // Erzeugen von unabhängigen Prozessen
         for (int i = 0; i < NUM_OF_PROCESSES; i++) {
-            pid = os.createProcess(5120); // 20 Seiten bei einer Seitengr��e von
+            pid = os.createProcess(5120); // 20 Seiten bei einer Seitengrääe von
             // 256 Byte
             if (pid < 0) {
                 System.out
-                        .println("*********** Fehlerhafte Konfiguration: Zu wenig RAM f�r "
+                        .println("*********** Fehlerhafte Konfiguration: Zu wenig RAM fär "
                                 + NUM_OF_PROCESSES + " Prozesse! *************");
                 break;
             }
