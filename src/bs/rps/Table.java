@@ -1,5 +1,6 @@
 package bs.rps;
 
+import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
 import java.util.ArrayList;
@@ -32,16 +33,16 @@ class Table {
      *
      * @param hand
      */
-    void addHand(Hand hand) throws InterruptedException {
+    void addHand(@NotNull Hand hand) throws InterruptedException {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered addHand()");
 
-        while (!readyForPlayer() && !Thread.interrupted()) {
+        while (!readyForPlayer()) {
             if (log && debugLog) System.out.println(Thread.currentThread() + " await readyForPlayer in addHand()");
             readyForPlayer.await();
         }
 
-        while (!isOtherPlayer() && !Thread.interrupted()) {
+        while (!isOtherPlayer()) {
             if (log && debugLog) System.out.println(Thread.currentThread() + " await otherPlayer in addHand()");
             isOtherPlayer.await();
         }
@@ -67,7 +68,7 @@ class Table {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
 
-        while (!readyForResults() && !Thread.interrupted()) {
+        while (!readyForResults()) {
             if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in getHands()");
             readyForResults.await();
@@ -86,7 +87,7 @@ class Table {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
 
-        while (!readyForResults() && !Thread.interrupted()) {
+        while (!readyForResults()) {
             if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in getPlayers()");
             readyForResults.await();
@@ -105,7 +106,7 @@ class Table {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered cleanTable()");
 
-        while (!readyForResults() && !Thread.interrupted()) {
+        while (!readyForResults()) {
             if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in cleanTable()");
             readyForResults.await();
