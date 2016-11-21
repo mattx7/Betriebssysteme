@@ -32,7 +32,7 @@ class Judge extends Thread {
                 List<Hand> hands = table.getHands();
                 Hand winner = payoff(hands, table.getPlayers()); // Runde auswerten
                 roundCounter++;
-                System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? null : winners.getLast().getName()), winner));
+                System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? "nobody" : winners.getLast().getName()), ((winner == null) ? "nothing" : winner)));
                 table.cleanTable();
             }
         } catch (InterruptedException e) {
