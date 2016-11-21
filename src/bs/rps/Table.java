@@ -9,7 +9,7 @@ import java.util.List;
  * <p>
  * MonitorClass
  */
-class TableMonitor {
+class Table {
     private List<Hand> hands = new ArrayList<Hand>();
     private List<Thread> player = new LinkedList<Thread>();
     private int playerOnTable = 2;
