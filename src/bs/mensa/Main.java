@@ -24,7 +24,7 @@ public class Main {
             students.add(student);
         }
 
-        System.out.println("==== Checkout opens ====");
+        System.out.println("==== Mensa is opening ====");
 
         try {
             Thread.currentThread().sleep(RUNTIME);
@@ -37,6 +37,6 @@ public class Main {
             }
         }
 
-        System.out.println("==== Checkout closes ====");
+        System.out.println("==== Mensa is closing====");
     }
 }

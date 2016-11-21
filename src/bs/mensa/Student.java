@@ -48,7 +48,7 @@ class Student extends Thread {
             }
         }
 
-        System.out.println(String.format("%s has eaten", this));
+        System.out.println(String.format("%s is leaving", this));
     }
 
     private long lunchtime(int from, int to) {
