@@ -11,13 +11,13 @@ class Student extends Thread {
     private Semaphore semaphore;
     private int number;
 
-    Student(int number, List<Checkout> checkouts, Semaphore semaphore) throws IllegalArgumentException {
+    Student(int number, List<Checkout> checkouts) throws IllegalArgumentException {
         if(checkouts.size() < 1)
             throw new IllegalArgumentException("The mensa needs to have at least one checkout.");
 
         this.number = number;
         this.checkouts = checkouts;
-        this.semaphore = semaphore;
+        this.semaphore = new Semaphore(1);
     }
 
     /**
@@ -32,30 +32,40 @@ class Student extends Thread {
                 semaphore.acquire();
 
                 // check queue for all checkouts
-                Checkout shortestQueu = checkouts.get(0);
-                for (Checkout next : checkouts) {
-                    if (next.getQueueSize() < shortestQueu.getQueueSize()) {
-                        shortestQueu = next;
-                    }
-                }
-
+                Checkout CheckoutWithShortestQueue = getShortestCheckout();
                 // get student into queue
-                shortestQueu.add(this);
+                CheckoutWithShortestQueue.addToQueue(this);
                 // release queue
                 semaphore.release();
                 // get in line at shortest queue and pay
-                shortestQueu.pay(this);
+                CheckoutWithShortestQueue.pay(this);
 
                 // eating for 200 ms to 700 ms
-                long time = 200 + (long)(Math.random() * 500);
-                Thread.currentThread().sleep(time);
+                Thread.currentThread().sleep(lunchtime(200, 700));
 
             } catch (InterruptedException e) {
                 interrupt();
             }
         }
 
-        System.out.println(String.format("%s is done", this));
+        System.out.println(String.format("%s has eaten", this));
+    }
+
+    private long lunchtime(int from, int to) {
+        return (from + (long) (Math.random() * (to - from)));
+    }
+
+    /**
+     * @return shortest Queue
+     */
+    private Checkout getShortestCheckout() {
+        Checkout shortestQueue = checkouts.get(0);
+        for (Checkout next : checkouts) {
+            if (next.getQueueSize() < shortestQueue.getQueueSize()) {
+                shortestQueue = next;
+            }
+        }
+        return shortestQueue;
     }
 
     @Override

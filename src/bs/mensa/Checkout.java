@@ -9,8 +9,10 @@ import java.util.concurrent.Semaphore;
  */
 class Checkout {
     private List<Student> waitingQueue = new ArrayList<>();
-    private Semaphore semaphore = new Semaphore(1, true);
+    private Semaphore semaphore = new Semaphore(1);
     private int number;
+
+    public static final int PAYMENT_TIME = 100; // in ms
 
     Checkout(int number) {
         this.number = number;
@@ -30,7 +32,7 @@ class Checkout {
      *
      * @param student adds to queue
      */
-    void add(Student student) {
+    void addToQueue(Student student) {
         waitingQueue.add(student);
     }
 
@@ -44,9 +46,7 @@ class Checkout {
         semaphore.acquire();
 
         try {
-            // payment takes up to 100 ms
-            long time = (long)(Math.random() * 100);
-            Thread.currentThread().sleep(time);
+            Thread.currentThread().sleep((long) (Math.random() * PAYMENT_TIME)); // from 0 to PAYMENT_TIME
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
