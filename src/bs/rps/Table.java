@@ -62,7 +62,7 @@ class Table {
      * Wait that Table has two Hands and two Player
      */
     private synchronized void awaitHands() throws InterruptedException {
-        while (hands.size() < playerOnTable && player.size() < playerOnTable && !Thread.currentThread().isInterrupted()) {
+        while (hands.size() < playerOnTable && player.size() < playerOnTable) {
             if (log && debugLog) System.out.println(Thread.currentThread() + " await hands");
             wait();
         }
@@ -73,7 +73,7 @@ class Table {
      * Wait that Table is ready for Player
      */
     private synchronized void awaitReadyForPlayer() throws InterruptedException {
-        while (hands.size() == playerOnTable && player.size() == playerOnTable && !Thread.currentThread().isInterrupted()) {
+        while (hands.size() == playerOnTable && player.size() == playerOnTable) {
             if (log && debugLog) System.out.println(Thread.currentThread() + " await clean table");
             wait();
         }
@@ -84,7 +84,7 @@ class Table {
      * Wait until new Round
      */
     private synchronized void awaitOtherPlayer() throws InterruptedException {
-        while (player.contains(Thread.currentThread()) && !Thread.currentThread().isInterrupted()) {
+        while (player.contains(Thread.currentThread())) {
             if (log && debugLog) System.out.println(Thread.currentThread() + " await other player");
             wait();
         }

@@ -21,12 +21,17 @@ public class Main {
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
-            System.err.println(e);
+            e.printStackTrace();
         } finally {
             thread1.interrupt();
             thread2.interrupt();
-            judge.interrupt();
-            judge.printScore();
+            try {
+                judge.sleep(50);
+                judge.printScore();
+                judge.interrupt();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Thread.currentThread().interrupt();
         }
     }
