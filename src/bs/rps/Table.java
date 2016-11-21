@@ -37,12 +37,12 @@ class Table {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered addHand()");
 
-        while (!readyForPlayer()) {
+        while (!readyForPlayer() && !Thread.currentThread().isInterrupted()) {
             if (log && debugLog) System.out.println(Thread.currentThread() + " await readyForPlayer in addHand()");
             readyForPlayer.await();
         }
 
-        while (!isOtherPlayer()) {
+        while (!isOtherPlayer() && !Thread.currentThread().isInterrupted()) {
             if (log && debugLog) System.out.println(Thread.currentThread() + " await otherPlayer in addHand()");
             isOtherPlayer.await();
         }
@@ -68,7 +68,7 @@ class Table {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
 
-        while (!readyForResults()) {
+        while (!readyForResults() && !Thread.currentThread().isInterrupted()) {
             if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in getHands()");
             readyForResults.await();
@@ -87,7 +87,7 @@ class Table {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
 
-        while (!readyForResults()) {
+        while (!readyForResults() && !Thread.currentThread().isInterrupted()) {
             if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in getPlayers()");
             readyForResults.await();
@@ -105,7 +105,7 @@ class Table {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered cleanTable()");
 
-        while (!readyForResults()) {
+        while (!readyForResults() && !Thread.currentThread().isInterrupted()) {
             if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in cleanTable()");
             readyForResults.await();

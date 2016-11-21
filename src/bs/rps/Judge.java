@@ -39,7 +39,9 @@ class Judge extends Thread {
                     table.cleanTable();
                 }
             }
+            Thread.interrupted();
         } catch (InterruptedException e) {
+            Thread.interrupted();
             System.out.println("Thread " + Thread.currentThread().getName() + " interrupted.");
         }
         System.out.println("Thread " + Thread.currentThread().getName() + " exiting.");

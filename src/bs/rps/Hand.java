@@ -39,7 +39,9 @@ enum Hand implements Runnable {
             while (!Thread.interrupted()) {
                 table.addHand(Hand.getRandom());
             }
+            Thread.interrupted();
         } catch (InterruptedException e) {
+            Thread.interrupted();
             System.out.println("Thread " + Thread.currentThread().getName() + " interrupted.");
         }
         System.out.println("Thread " + Thread.currentThread().getName() + " exiting.");
