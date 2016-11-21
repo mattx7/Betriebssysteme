@@ -8,7 +8,7 @@ import java.util.concurrent.Semaphore;
  */
 class Student extends Thread {
     private List<Checkout> checkouts;
-    private Semaphore semaphore;
+    private final Semaphore semaphore = new Semaphore(1);
     private int number;
 
     Student(int number, List<Checkout> checkouts) throws IllegalArgumentException {
@@ -17,7 +17,6 @@ class Student extends Thread {
 
         this.number = number;
         this.checkouts = checkouts;
-        this.semaphore = new Semaphore(1);
     }
 
     /**
@@ -41,7 +40,7 @@ class Student extends Thread {
                 CheckoutWithShortestQueue.pay(this);
 
                 // eating for 200 ms to 700 ms
-                Thread.currentThread().sleep(lunchtime(200, 700));
+                Thread.sleep(lunchtime(200, 700));
 
             } catch (InterruptedException e) {
                 interrupt();
