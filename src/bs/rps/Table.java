@@ -20,8 +20,8 @@ class Table {
     private List<Hand> hands = new ArrayList<Hand>();
     private List<Thread> players = new LinkedList<Thread>();
     private int amountOfPlayer = 2;
-    public static final boolean DEBUG_LOG = false;
-    public static final boolean LOG = true;
+    public static boolean debugLog = false;
+    public static boolean log = true;
 
     private final ReentrantLock mutex = new ReentrantLock(true); // Binäres Semaphor („Mutex“)
     private final Condition readyForResults = mutex.newCondition();
@@ -35,19 +35,19 @@ class Table {
      */
     void addHand(@NotNull Hand hand) throws InterruptedException {
         mutex.lock();
-        if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " entered addHand()");
+        if (log && debugLog) System.out.println(Thread.currentThread() + " entered addHand()");
 
         while (!readyForPlayer()) {
-            if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " await readyForPlayer in addHand()");
+            if (log && debugLog) System.out.println(Thread.currentThread() + " await readyForPlayer in addHand()");
             readyForPlayer.await();
         }
 
         while (!isOtherPlayer()) {
-            if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " await otherPlayer in addHand()");
+            if (log && debugLog) System.out.println(Thread.currentThread() + " await otherPlayer in addHand()");
             isOtherPlayer.await();
         }
 
-        if (LOG)
+        if (log)
             System.out.println(Thread.currentThread() + " sets " + hand + " on table | Queue: " + mutex.getQueueLength());
         this.hands.add(hand);
         players.add(Thread.currentThread());
@@ -66,15 +66,15 @@ class Table {
     @Nullable
     List<Hand> getHands() throws InterruptedException {
         mutex.lock();
-        if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " entered getHands()");
+        if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
 
         while (!readyForResults()) {
-            if (LOG && DEBUG_LOG)
+            if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in getHands()");
             readyForResults.await();
         }
 
-        if (LOG) System.out.println(Thread.currentThread() + " getHand() | Queue: " + mutex.getQueueLength());
+        if (log) System.out.println(Thread.currentThread() + " getHand() | Queue: " + mutex.getQueueLength());
         mutex.unlock();
         return hands;
     }
@@ -85,15 +85,15 @@ class Table {
     @Nullable
     List<Thread> getPlayers() throws InterruptedException {
         mutex.lock();
-        if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " entered getHands()");
+        if (log && debugLog) System.out.println(Thread.currentThread() + " entered getHands()");
 
         while (!readyForResults()) {
-            if (LOG && DEBUG_LOG)
+            if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in getPlayers()");
             readyForResults.await();
         }
 
-        if (LOG) System.out.println(Thread.currentThread() + " getPlayers() | Queue: " + mutex.getQueueLength());
+        if (log) System.out.println(Thread.currentThread() + " getPlayers() | Queue: " + mutex.getQueueLength());
         mutex.unlock();
         return this.players;
     }
@@ -104,15 +104,15 @@ class Table {
 
     void cleanTable() throws InterruptedException {
         mutex.lock();
-        if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " entered cleanTable()");
+        if (log && debugLog) System.out.println(Thread.currentThread() + " entered cleanTable()");
 
         while (!readyForResults()) {
-            if (LOG && DEBUG_LOG)
+            if (log && debugLog)
                 System.out.println(Thread.currentThread() + " await readyForResults in cleanTable()");
             readyForResults.await();
         }
 
-        if (LOG) System.out.println(Thread.currentThread() + " cleanTable()");
+        if (log) System.out.println(Thread.currentThread() + " cleanTable()");
         this.hands.clear();
         this.players.clear();
         readyForPlayer.signal();
