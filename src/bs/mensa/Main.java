@@ -27,7 +27,7 @@ public class Main {
         System.out.println("==== Mensa is opening ====");
 
         try {
-            Thread.currentThread().sleep(RUNTIME);
+            Thread.sleep(RUNTIME);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
