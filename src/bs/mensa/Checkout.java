@@ -45,11 +45,7 @@ class Checkout {
     void pay(Student student) throws InterruptedException {
         semaphore.acquire();
 
-        try {
-            Thread.currentThread().sleep((long) (Math.random() * PAYMENT_TIME)); // from 0 to PAYMENT_TIME
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        Thread.currentThread().sleep((long) (Math.random() * PAYMENT_TIME)); // from 0 to PAYMENT_TIME
 
         System.out.println(String.format("%s payed at Checkout %d while %d students are still waiting", student, number, getQueueSize()-1));
         waitingQueue.remove(student);
