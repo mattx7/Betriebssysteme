@@ -15,8 +15,8 @@ class Table {
     private List<Hand> hands = new ArrayList<Hand>();
     private List<Thread> player = new LinkedList<Thread>();
     private int playerOnTable = 2;
-    public static final boolean DEBUG_LOG = false;
-    public static final boolean LOG = true;
+    public static boolean debugLog = false;
+    public static boolean log = true;
 
     /**
      * adds Hands to the table
@@ -26,7 +26,7 @@ class Table {
     synchronized void addHand(@NotNull Hand hand) throws InterruptedException {
         awaitReadyForPlayer();
         awaitOtherPlayer();
-        if (LOG) System.out.println(Thread.currentThread() + " " + hand + " addHand()");
+        if (log) System.out.println(Thread.currentThread() + " " + hand + " addHand()");
         this.hands.add(hand);
         notifyAll();
     }
@@ -36,7 +36,7 @@ class Table {
      */
     synchronized void cleanTable() throws InterruptedException {
         awaitHands();
-        if (LOG) System.out.println(Thread.currentThread() + " cleanTable()");
+        if (log) System.out.println(Thread.currentThread() + " cleanTable()");
         hands.clear();
         player.clear();
         notifyAll();
@@ -48,7 +48,7 @@ class Table {
     @NotNull
     synchronized List<Hand> getHands() throws InterruptedException {
         awaitHands();
-        if (LOG) System.out.println(Thread.currentThread() + " getHand()");
+        if (log) System.out.println(Thread.currentThread() + " getHand()");
         return hands;
     }
 
@@ -58,7 +58,7 @@ class Table {
     @NotNull
     synchronized List<Thread> getPlayers() throws InterruptedException {
         awaitHands();
-        if (LOG) System.out.println(Thread.currentThread() + " getPlayer()");
+        if (log) System.out.println(Thread.currentThread() + " getPlayer()");
         return player;
     }
 
@@ -67,10 +67,10 @@ class Table {
      */
     private synchronized void awaitHands() throws InterruptedException {
         while (hands.size() < playerOnTable && player.size() < playerOnTable) {
-            if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " await hands");
+            if (log && debugLog) System.out.println(Thread.currentThread() + " await hands");
             wait();
         }
-        if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " is awake");
+        if (log && debugLog) System.out.println(Thread.currentThread() + " is awake");
     }
 
     /**
@@ -78,10 +78,10 @@ class Table {
      */
     private synchronized void awaitReadyForPlayer() throws InterruptedException {
         while (hands.size() == playerOnTable && player.size() == playerOnTable) {
-            if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " await clean table");
+            if (log && debugLog) System.out.println(Thread.currentThread() + " await clean table");
             wait();
         }
-        if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " is awake");
+        if (log && debugLog) System.out.println(Thread.currentThread() + " is awake");
     }
 
     /**
@@ -89,10 +89,10 @@ class Table {
      */
     private synchronized void awaitOtherPlayer() throws InterruptedException {
         while (player.contains(Thread.currentThread())) {
-            if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " await other player");
+            if (log && debugLog) System.out.println(Thread.currentThread() + " await other player");
             wait();
         }
         player.add(Thread.currentThread());
-        if (LOG && DEBUG_LOG) System.out.println(Thread.currentThread() + " is awake");
+        if (log && debugLog) System.out.println(Thread.currentThread() + " is awake");
     }
 }
