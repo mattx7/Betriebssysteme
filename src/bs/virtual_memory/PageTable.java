@@ -1,4 +1,4 @@
-package osbsp;
+package bs.virtual_memory;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -159,8 +159,7 @@ public class PageTable {
      */
     private PageTableEntry randomAlgorithm(PageTableEntry newPte) {
         // ToDo
-
-        return pte;
+        return newPte;
     }
 
     // ----------------------- Hilfsmethode --------------------------------

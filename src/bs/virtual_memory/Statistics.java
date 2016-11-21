@@ -1,4 +1,4 @@
-package osbsp;
+package bs.virtual_memory;
 
 /**
  * Sammlung und Auswertung statistischer Daten eines Simulationslaufs

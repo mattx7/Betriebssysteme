@@ -1,13 +1,13 @@
-package osbsp;
+package bs.virtual_memory;
 
 /**
  * FreeListBlock
  * <p>
- * Datenstrukturelement einer Freibereichsliste, das Adresse und Gr��e eines freien Blocks angibt
+ * Datenstrukturelement einer Freibereichsliste, das Adresse und Gr??e eines freien Blocks angibt
  */
 public class FreeListBlock implements Comparable<Object> {
     private int adress;        // Reale Startadresse des freien Blocks
-    private int size;        // L�nge des freien Blocks in Byte
+    private int size;        // L?nge des freien Blocks in Byte
 
     /**
      * Konstruktor
@@ -18,11 +18,11 @@ public class FreeListBlock implements Comparable<Object> {
     }
 
     /**
-     * Vergleichsfunktion f�r Sortierung
+     * Vergleichsfunktion f?r Sortierung
      */
 
     public int compareTo(Object otherBlock) {
-        // Vergleiche mit anderem FreeListBlock f�r die Sortierung
+        // Vergleiche mit anderem FreeListBlock f?r die Sortierung
         return this.getAdress() - ((FreeListBlock) otherBlock).getAdress();
     }
 
@@ -34,7 +34,7 @@ public class FreeListBlock implements Comparable<Object> {
     }
 
     /**
-     * @return Gr��e des Blocks
+     * @return Gr??e des Blocks
      */
     public int getSize() {
         return size;
@@ -48,7 +48,7 @@ public class FreeListBlock implements Comparable<Object> {
     }
 
     /**
-     * @param i Gr��e zuweisen
+     * @param i Gr??e zuweisen
      */
     public void setSize(int i) {
         size = i;

@@ -1,4 +1,4 @@
-package osbsp;
+package bs.virtual_memory;
 
 /**
  * Simulation eines Hauptspeicherverwaltungssystems auf Basis eines

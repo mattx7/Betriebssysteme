@@ -1,4 +1,4 @@
-package osbsp;
+package bs.virtual_memory;
 
 /*
  * OperatingSystem.java
@@ -167,7 +167,7 @@ public class OperatingSystem {
     /**
      * Prozess-Objekt (Thread) erzeugen und in Prozessliste eintragen
      *
-     * @param die Gr��e des Prozess-Hauptspeicherbedarfs in Byte
+     * @param processSize die Gr��e des Prozess-Hauptspeicherbedarfs in Byte
      * @return die neue Prozess-ID oder -1, wenn Erzeugung nicht m�glich
      * (Speichermangel)
      */
@@ -304,7 +304,7 @@ public class OperatingSystem {
      */
     public synchronized int read(int pid, int virtAdr) {
         // ToDo
-
+        return 0;
     }
 
     // --------------- Private Methoden des Betriebssystems
@@ -324,6 +324,7 @@ public class OperatingSystem {
      */
     private int getVirtualPageNum(int virtAdr) {
         // ToDo
+        return 0;
     }
 
     /**
@@ -332,6 +333,7 @@ public class OperatingSystem {
      */
     private int getOffset(int virtAdr) {
         // ToDo
+        return 0;
     }
 
     /**
