@@ -1,5 +1,7 @@
 package bs.rps;
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ class Judge extends Thread {
                 if (hands != null) {
                     Hand winner = payoff(hands, table.getPlayers()); // Runde auswerten
                     roundCounter++;
-                    System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? null : winners.getLast().getName()), winner));
+                    System.out.println(String.format("[%s:%s] %s wins with %s ", hands.get(0), hands.get(1), ((winners.getLast() == null) ? "nobody" : winners.getLast().getName()), (winner == null) ? "nothing" : winner));
                     table.cleanTable();
                 }
             }
@@ -47,6 +49,7 @@ class Judge extends Thread {
     /**
      * @return Winning Hand or null if draw
      */
+    @Nullable
     private Hand payoff(List<Hand> hands, List<Thread> player) {
         Hand hand1 = hands.get(0);
         Hand hand2 = hands.get(1);

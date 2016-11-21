@@ -7,6 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         Table table = new Table(); // Monitor
+        Table.debugLog = true;
         Judge judge = new Judge(table, "judge");
         Hand hand1 = Hand.getRandom();
         hand1.setTable(table);

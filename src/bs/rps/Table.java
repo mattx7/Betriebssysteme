@@ -51,11 +51,11 @@ class Table {
             System.out.println(Thread.currentThread() + " sets " + hand + " on table | Queue: " + mutex.getQueueLength());
         this.hands.add(hand);
         players.add(Thread.currentThread());
-        if (readyForResults()) {
+
             readyForResults.signalAll();
-        } else {
-            isOtherPlayer.signalAll();
-        }
+
+        isOtherPlayer.signalAll();
+
 
         mutex.unlock();
     }
@@ -101,7 +101,6 @@ class Table {
     /**
      * Cleans the table for a new game
      */
-
     void cleanTable() throws InterruptedException {
         mutex.lock();
         if (log && debugLog) System.out.println(Thread.currentThread() + " entered cleanTable()");
@@ -115,7 +114,7 @@ class Table {
         if (log) System.out.println(Thread.currentThread() + " cleanTable()");
         this.hands.clear();
         this.players.clear();
-        readyForPlayer.signal();
+        readyForPlayer.signalAll();
 
         mutex.unlock();
     }
