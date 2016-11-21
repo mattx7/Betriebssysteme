@@ -34,6 +34,7 @@ class Student extends Thread {
                 Checkout CheckoutWithShortestQueue = getShortestCheckout();
                 // get student into queue
                 CheckoutWithShortestQueue.addToQueue(this);
+                System.out.println(Thread.currentThread() + " at Checkout " + CheckoutWithShortestQueue.number);
                 // release queue
                 semaphore.release();
                 // get in line at shortest queue and pay

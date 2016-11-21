@@ -10,7 +10,7 @@ import java.util.concurrent.Semaphore;
 class Checkout {
     private List<Student> waitingQueue = new ArrayList<>();
     private Semaphore semaphore = new Semaphore(1);
-    private int number;
+    public int number;
 
     public static final int PAYMENT_TIME = 100; // in ms
 
