@@ -304,7 +304,40 @@ public class OperatingSystem {
      */
     public synchronized int read(int pid, int virtAdr) {
         // ToDo
-        return 0;
+        // eingabe prüfen
+        if (virtAdr < 0 || virtAdr > VIRT_ADR_SPACE - WORD_SIZE) {
+            System.err.println(String.format("OS: read ERROR %d: Adresse %d liegt außerhalb des virtuellen Adressraums %d", pid, virtAdr, VIRT_ADR_SPACE));
+            return -1;
+        }
+
+        // Seitenadresse berechnen
+        int virtualPageNum = getVirtualPageNum(virtAdr);
+        int offset = getOffset(virtAdr);
+        testOut(String.format("OS: read %d %d +++ Seitennr.: %d Offset: %d", pid, virtAdr, virtualPageNum, offset));
+
+        // pte laden
+        Process process = getProcess(pid);
+        PageTableEntry pte = process.pageTable.getPte(virtualPageNum);
+
+        if (pte == null) {
+            System.err.println(String.format("OS: read ERROR %d: Adresse %d ist noch nicht beschrieben", pid, virtAdr));
+            return -1;
+        }
+
+        // Seite vorhanden: Seite valid (im RAM)?
+        if (!pte.valid) {
+            // Seite nicht valid (also auf Platte --> Seitenfehler):
+            pte = handlePageFault(pte, pid);
+        }
+
+        // Statistische Zählung
+        eventLog.incrementReadAccesses();
+
+        pte.referenced = true;
+
+        // reale addresse im speicher
+        int wordAddr = pte.realPageFrameAdr + offset;
+        return readFromRAM(wordAddr);
     }
 
     // --------------- Private Methoden des Betriebssystems
@@ -323,8 +356,8 @@ public class OperatingSystem {
      * @return Die entsprechende virtuelle Seitennummer
      */
     private int getVirtualPageNum(int virtAdr) {
-        // ToDo
-        return 0;
+        // ToDo integer division
+        return virtAdr / PAGE_SIZE;
     }
 
     /**
@@ -332,8 +365,8 @@ public class OperatingSystem {
      * @return Den entsprechenden Offset zur Berechnung der realen Adresse
      */
     private int getOffset(int virtAdr) {
-        // ToDo
-        return 0;
+        // ToDo rest berechnung
+        return virtAdr % PAGE_SIZE;
     }
 
     /**
