@@ -41,7 +41,7 @@ public class SimulationEnv {
         // ------------------------- Parameter setzen
         // ------------------------------------------
         // Dauer der Simulation in ms
-        simulationTime = 200;
+        simulationTime = 700;
         // max. Anzahl Seiten pro Prozess im Hauptspeicher (sonst Verdrängung
         // eigener Seiten)
         os.setMAX_RAM_PAGES_PER_PROCESS(10);
