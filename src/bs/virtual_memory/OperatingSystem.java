@@ -306,21 +306,21 @@ public class OperatingSystem {
         // ToDo
         // eingabe prüfen
         if (virtAdr < 0 || virtAdr > VIRT_ADR_SPACE - WORD_SIZE) {
-            System.err.println(String.format("OS: read ERROR %d: Adresse %d liegt außerhalb des virtuellen Adressraums %d", pid, virtAdr, VIRT_ADR_SPACE));
+            System.err.println(String.format("ERROR %d occured by read: Die Adresse %d liegt außerhalb des virtuellen Adressraums %d", pid, virtAdr, VIRT_ADR_SPACE));
             return -1;
         }
 
         // Seitenadresse berechnen
         int virtualPageNum = getVirtualPageNum(virtAdr);
         int offset = getOffset(virtAdr);
-        testOut(String.format("OS: read %d %d +++ Seitennr.: %d Offset: %d", pid, virtAdr, virtualPageNum, offset));
+        testOut(String.format("ERROR %d occured by read: Adresse: %d , Seitennr.: %d , Offset: %d", pid, virtAdr, virtualPageNum, offset));
 
         // pte laden
         Process process = getProcess(pid);
         PageTableEntry pte = process.pageTable.getPte(virtualPageNum);
 
         if (pte == null) {
-            System.err.println(String.format("OS: read ERROR %d: Adresse %d ist noch nicht beschrieben", pid, virtAdr));
+            System.err.println(String.format("ERROR %d occured by read: Adresse %d ist nicht beschrieben", pid, virtAdr));
             return -1;
         }
 
