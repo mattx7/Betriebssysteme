@@ -319,7 +319,7 @@ public class OperatingSystem {
         Process process = getProcess(pid);
         PageTableEntry pte = process.pageTable.getPte(virtualPageNum);
 
-        if (pte == null) {
+        if (pte == null) { //process == null
             System.err.println(String.format("ERROR %d occured by read: Adresse %d ist nicht beschrieben", pid, virtAdr));
             return -1;
         }

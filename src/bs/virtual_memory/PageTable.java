@@ -160,7 +160,7 @@ public class PageTable {
     private PageTableEntry randomAlgorithm(PageTableEntry newPte) {
         // ToDo
         int rnd = (int) Math.ceil(Math.random() * pteRAMlist.size() - 1);
-        os.testOut(String.format("Prozess %d: Random-Algorithmus hat pte ausgew�hlt: %d", pid, rnd));
+        os.testOut(String.format("Prozess %d: Random-Algorithmus hat pte ausgewählt: %d", pid, rnd));
         return pteRAMlist.set(rnd, newPte);
     }
 
